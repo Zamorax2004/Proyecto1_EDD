@@ -5,6 +5,8 @@
 package proyecto_edd;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
 
 
 /**
@@ -12,14 +14,12 @@ import java.awt.event.ActionListener;
  * @author simon
  */
 public class VentanaP extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form MainV
      */
     public VentanaP() {
         initComponents();
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -66,12 +66,21 @@ public class VentanaP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileChooserActionPerformed
+    JFileChooser fileChooser = new JFileChooser();
+    int returnValue = fileChooser.showOpenDialog(null);
+    if (returnValue == JFileChooser.APPROVE_OPTION){
+        File selectedFile = fileChooser.getSelectedFile();
         
+    }else{
+        System.out.println("Error");
+    }
+    
     }//GEN-LAST:event_openFileChooserActionPerformed
 
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
-    VentanaM v2 = new VentanaM(this);
-    
+        VentanaM v2 = new VentanaM();
+        this.dispose();
+        v2.setVisible(true);
     }//GEN-LAST:event_NextActionPerformed
 
     /**

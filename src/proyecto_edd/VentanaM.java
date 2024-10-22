@@ -9,19 +9,12 @@ package proyecto_edd;
  * @author simon
  */
 public class VentanaM extends javax.swing.JFrame {
-    
-    public static VentanaP v1;
 
     /**
      * Creates new form VentanaM
-     * @param v1
      */
-    public VentanaM(VentanaP v1) {
+    public VentanaM() {
         initComponents();
-        this.v1 = v1;
-        v1.setVisible(false);
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -55,7 +48,9 @@ public class VentanaM extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        VentanaP v1 = new VentanaP();
+        this.dispose();
+        v1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -88,7 +83,7 @@ public class VentanaM extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaM(v1).setVisible(true);
+                new VentanaM().setVisible(true);
             }
         });
     }
