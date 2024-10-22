@@ -4,8 +4,6 @@
  */
 package proyecto_edd;
 
-import java.awt.event.ActionListener;
-import java.io.File;
 import javax.swing.JFileChooser;
 
 
@@ -41,16 +39,18 @@ public class VentanaP extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Title.setText("Placeholder");
-        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, -1, -1));
+        Title.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        Title.setText("Titulo");
+        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 50, 170, -1));
 
+        openFileChooser.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         openFileChooser.setText("Escoger archivo");
         openFileChooser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openFileChooserActionPerformed(evt);
             }
         });
-        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, -1, -1));
+        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, -1, -1));
 
         Next.setText("Next");
         Next.addActionListener(new java.awt.event.ActionListener() {
@@ -58,7 +58,7 @@ public class VentanaP extends javax.swing.JFrame {
                 NextActionPerformed(evt);
             }
         });
-        jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 260, -1, -1));
+        jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 390));
 
