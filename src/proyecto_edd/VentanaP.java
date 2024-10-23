@@ -5,6 +5,7 @@
 package proyecto_edd;
 
 import javax.swing.JFileChooser;
+import java.io.File;
 
 
 /**
@@ -33,6 +34,7 @@ public class VentanaP extends javax.swing.JFrame {
         Title = new javax.swing.JLabel();
         openFileChooser = new javax.swing.JButton();
         Next = new javax.swing.JButton();
+        textField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -50,7 +52,7 @@ public class VentanaP extends javax.swing.JFrame {
                 openFileChooserActionPerformed(evt);
             }
         });
-        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, -1, -1));
+        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, -1, -1));
 
         Next.setText("Next");
         Next.addActionListener(new java.awt.event.ActionListener() {
@@ -59,6 +61,7 @@ public class VentanaP extends javax.swing.JFrame {
             }
         });
         jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, -1, -1));
+        jPanel1.add(textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 170, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 390));
 
@@ -70,7 +73,7 @@ public class VentanaP extends javax.swing.JFrame {
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION){
         File selectedFile = fileChooser.getSelectedFile();
-        
+        textField.setText(selectedFile.getAbsolutePath());
     }else{
         System.out.println("Error");
     }
@@ -124,6 +127,7 @@ public class VentanaP extends javax.swing.JFrame {
     private javax.swing.JLabel Title;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton openFileChooser;
+    private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
 }
 
