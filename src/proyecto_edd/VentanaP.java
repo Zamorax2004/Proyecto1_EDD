@@ -6,6 +6,8 @@ package proyecto_edd;
 
 import javax.swing.JFileChooser;
 import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 
 /**
@@ -69,7 +71,11 @@ public class VentanaP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileChooserActionPerformed
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    fileChooser.setDialogTitle("Elige un archivo .txt");
+    FileNameExtensionFilter restrict = new FileNameExtensionFilter("Solo archivos .txt", "txt");
+    fileChooser.addChoosableFileFilter(restrict);
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION){
         File selectedFile = fileChooser.getSelectedFile();
