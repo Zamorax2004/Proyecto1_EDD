@@ -8,8 +8,9 @@ public class Json {
 
     public static void main(String[] args) {
         ObjectMapper mapper = new ObjectMapper();
+        VentanaP selectedFile = 
         try{
-            Object data = mapper.readValue(new File("Caracas.json"), Object.class);
+            Object data = mapper.readValue(File(selectedFile), Object.class);
             
             mapper.writeValue(new File("CaracasNew.json"), data);
         }catch (IOException e){
