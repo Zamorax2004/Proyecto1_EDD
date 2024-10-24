@@ -1,8 +1,10 @@
 package proyecto_edd;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String red;
-    private int num_linea;
+    private String num_linea;
     private String parada;
 
     public String getRed() {
@@ -13,11 +15,11 @@ public class User {
         this.red = red;
     }
 
-    public int getNum_linea() {
+    public String getNum_linea() {
         return num_linea;
     }
 
-    public void setNum_linea(int num_linea) {
+    public void setNum_linea(String num_linea) {
         this.num_linea = num_linea;
     }
 
