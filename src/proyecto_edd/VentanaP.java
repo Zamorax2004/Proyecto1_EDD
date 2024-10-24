@@ -73,8 +73,8 @@ public class VentanaP extends javax.swing.JFrame {
     private void openFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileChooserActionPerformed
     JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
     fileChooser.setAcceptAllFileFilterUsed(false);
-    fileChooser.setDialogTitle("Elige un archivo .txt");
-    FileNameExtensionFilter restrict = new FileNameExtensionFilter("Solo archivos .txt", "txt");
+    fileChooser.setDialogTitle("Elige un archivo .json");
+    FileNameExtensionFilter restrict = new FileNameExtensionFilter("Solo archivos .json", "json");
     fileChooser.addChoosableFileFilter(restrict);
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION){
