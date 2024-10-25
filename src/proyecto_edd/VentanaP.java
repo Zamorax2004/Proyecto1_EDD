@@ -4,8 +4,10 @@
  */
 package proyecto_edd;
 
+import com.google.gson.JsonObject;
 import javax.swing.JFileChooser;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -15,7 +17,7 @@ import javax.swing.filechooser.FileSystemView;
  * @author simon
  */
 public class VentanaP extends javax.swing.JFrame {
-    
+    private File selectedFile;
     /**
      * Creates new form MainV
      */
@@ -78,14 +80,40 @@ public class VentanaP extends javax.swing.JFrame {
     fileChooser.addChoosableFileFilter(restrict);
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION){
-        File selectedFile = fileChooser.getSelectedFile();
+        selectedFile = fileChooser.getSelectedFile();
         textField.setText(selectedFile.getAbsolutePath());
     }else{
         System.out.println("Error");
     }
     
     }//GEN-LAST:event_openFileChooserActionPerformed
-
+    private void leerJson(){
+        if (selectedFile != null){
+            Json jsonHandler = new Json(selectedFile);
+            try{
+                JsonObject jsonObject = jsonHandler.readJson();
+                System.out.println(jsonObject);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("No seleccionó un archivo");
+        }
+    }
+    private void writeJson(JsonObject jsonObject){
+        if (selectedFile != null){
+            Json jsonHandler = new Json(selectedFile);
+            try{
+                jsonHandler.writeJson(jsonObject);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("No seleccionó un archivo");
+        }
+    }
+    
+    
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         VentanaM v2 = new VentanaM();
         this.dispose();
