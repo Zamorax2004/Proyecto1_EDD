@@ -4,9 +4,14 @@
  */
 package proyecto_edd;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import javax.swing.JFileChooser;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -39,6 +44,7 @@ public class VentanaP extends javax.swing.JFrame {
         openFileChooser = new javax.swing.JButton();
         Next = new javax.swing.JButton();
         textField = new javax.swing.JTextField();
+        saveFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -50,7 +56,7 @@ public class VentanaP extends javax.swing.JFrame {
         jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 50, 170, -1));
 
         openFileChooser.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        openFileChooser.setText("Escoger archivo");
+        openFileChooser.setText("Escoger Archivo");
         openFileChooser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openFileChooserActionPerformed(evt);
@@ -65,7 +71,21 @@ public class VentanaP extends javax.swing.JFrame {
             }
         });
         jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, -1, -1));
+
+        textField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textFieldActionPerformed(evt);
+            }
+        });
         jPanel1.add(textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 170, -1));
+
+        saveFile.setText("Guardar Archivo");
+        saveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFileActionPerformed(evt);
+            }
+        });
+        jPanel1.add(saveFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 340, 190, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 390));
 
@@ -81,30 +101,23 @@ public class VentanaP extends javax.swing.JFrame {
     int returnValue = fileChooser.showOpenDialog(null);
     if (returnValue == JFileChooser.APPROVE_OPTION){
         selectedFile = fileChooser.getSelectedFile();
-        textField.setText(selectedFile.getAbsolutePath());
+        textField.setText(selectedFile.getName());
+        readJson();
     }else{
         System.out.println("Error");
     }
     
     }//GEN-LAST:event_openFileChooserActionPerformed
-    private void leerJson(){
+    private void readJson(){
         if (selectedFile != null){
-            Json jsonHandler = new Json(selectedFile);
-            try{
-                JsonObject jsonObject = jsonHandler.readJson();
-                System.out.println(jsonObject);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }else{
-            System.out.println("No seleccionó un archivo");
-        }
-    }
-    private void writeJson(JsonObject jsonObject){
-        if (selectedFile != null){
-            Json jsonHandler = new Json(selectedFile);
-            try{
-                jsonHandler.writeJson(jsonObject);
+            try (FileReader reader = new FileReader(selectedFile)){
+                JsonElement jsonElement = JsonParser.parseReader(reader);
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                modifyJson(jsonObject);
+                try (FileWriter writer = new FileWriter(selectedFile)){
+                    writer.write(jsonObject.toString());
+                }
+                System.out.println("JSON se modificó con exito");
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -113,12 +126,48 @@ public class VentanaP extends javax.swing.JFrame {
         }
     }
     
+    private void modifyJson(JsonObject jsonObject) {
+        JsonArray metroDeCaracas = jsonObject.getAsJsonArray("Metro de Caracas");
+
+        for (JsonElement lineElement : metroDeCaracas) {
+            JsonObject lineObject = lineElement.getAsJsonObject();
+            for (String lineKey : lineObject.keySet()) {
+                JsonArray stationsArray = lineObject.getAsJsonArray(lineKey);
+                for (int i = 0; i < stationsArray.size(); i++) {
+                    JsonElement stationElement = stationsArray.get(i);
+                    if (stationElement.isJsonObject()) {
+                        JsonObject stationObject = stationElement.getAsJsonObject();
+                        for (String stationKey : stationObject.keySet()) {
+                            stationObject.addProperty("Linea", "1"); // Add your property here
+                        }
+                    } else if (stationElement.isJsonPrimitive()) {
+                        String stationName = stationElement.getAsString();
+                        JsonObject newStationObject = new JsonObject();
+                        newStationObject.addProperty(stationName, "propertyValue"); // Add your property here
+                        stationsArray.set(i, newStationObject);
+                    }
+                }
+            }
+        }
+    }
     
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         VentanaM v2 = new VentanaM();
         this.dispose();
         v2.setVisible(true);
     }//GEN-LAST:event_NextActionPerformed
+
+    private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldActionPerformed
+
+    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
+        if (selectedFile != null){
+            readJson();
+        }else{
+            System.out.println("No se detecta ningun archivo");
+        }
+    }//GEN-LAST:event_saveFileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -161,6 +210,7 @@ public class VentanaP extends javax.swing.JFrame {
     private javax.swing.JLabel Title;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton openFileChooser;
+    private javax.swing.JButton saveFile;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
 }

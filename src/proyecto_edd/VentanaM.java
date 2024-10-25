@@ -34,6 +34,7 @@ public class VentanaM extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        tField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -49,6 +50,11 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         setT.setText("Establecer t");
+        setT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setTActionPerformed(evt);
+            }
+        });
         jPanel1.add(setT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
         jButton3.setText("Colocar sucursal");
@@ -61,10 +67,22 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
 
         jButton6.setText("Agregar Linea");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
 
         jButton7.setText("Mostrar Grafo");
         jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+
+        tField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tFieldActionPerformed(evt);
+            }
+        });
+        jPanel1.add(tField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -76,6 +94,23 @@ public class VentanaM extends javax.swing.JFrame {
         this.dispose();
         v1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void tFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tFieldActionPerformed
+        
+    }//GEN-LAST:event_tFieldActionPerformed
+
+    private void setTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTActionPerformed
+        try{
+            int t = Integer.parseInt(tField.getText());
+            System.out.println("t: " + t);
+        }catch (NumberFormatException e){
+            System.out.println("Error. Ingrese un numero entero.");
+        }
+    }//GEN-LAST:event_setTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -121,5 +156,6 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton setT;
+    private javax.swing.JTextField tField;
     // End of variables declaration//GEN-END:variables
 }
