@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 
 
 /**
@@ -23,8 +22,10 @@ public class VentanaM extends javax.swing.JFrame {
     /**
      * Creates new form VentanaM
      */
-    public VentanaM(String newJsonFilePath) {
+    public VentanaM(String newJsonFilePath, int t) {
         this.newJsonFilePath = newJsonFilePath;
+        this.sucursal = new Sucursal(null);
+        this.sucursal.setT(t);
         initComponents();
         textField2.setEditable(false);
         loadStations();
@@ -44,7 +45,7 @@ public class VentanaM extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         setT = new javax.swing.JButton();
         colocarSucursal = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        searchDFS = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -53,6 +54,7 @@ public class VentanaM extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         saveFile1 = new javax.swing.JButton();
+        searchBFS = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -83,11 +85,21 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
 
-        jButton4.setText("Ver cobertura sucursal");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        searchDFS.setText("Ver cobertura sucursal (Busqueda a profundidad)");
+        searchDFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchDFSActionPerformed(evt);
+            }
+        });
+        jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
 
         jButton5.setText("Revisar cobertura total");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
 
         jButton6.setText("Agregar Linea");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +107,7 @@ public class VentanaM extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, -1, -1));
 
         jButton7.setText("Mostrar Grafo");
         jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
@@ -131,6 +143,9 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(saveFile1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
 
+        searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)");
+        jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
         pack();
@@ -153,7 +168,12 @@ public class VentanaM extends javax.swing.JFrame {
     private void setTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTActionPerformed
         try{
             int t = Integer.parseInt(tField.getText());
-            System.out.println("t: " + t);
+            if (sucursal != null){
+                sucursal.setT(t);
+                System.out.println("t: " + t);
+            }else{
+                System.out.println("La sucursal no esta seleccionada");
+            }
         }catch (NumberFormatException e){
             System.out.println("Error. Ingrese un numero entero.");
         }
@@ -164,9 +184,9 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_textField2ActionPerformed
 
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-        String selectedStation = jList1.getSelectedValue();
-        if (selectedStation != null){
-            sucursal = new Sucursal(selectedStation);
+        String station = jList1.getSelectedValue();
+        if (station != null){
+            sucursal = new Sucursal(station);
             textField2.setText(sucursal.getStation().toString());
         }else{
             textField2.setText("No se ha seleccionado una parada");
@@ -176,6 +196,14 @@ public class VentanaM extends javax.swing.JFrame {
     private void saveFile1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile1ActionPerformed
          
     }//GEN-LAST:event_saveFile1ActionPerformed
+
+    private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchDFSActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void loadStations() {
         if (newJsonFilePath != null) {
@@ -239,8 +267,9 @@ public class VentanaM extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                String newJsonFilePath = ""; 
-                new VentanaM(newJsonFilePath).setVisible(true);
+                String newJsonFilePath = "";
+                int t = 0;
+                new VentanaM(newJsonFilePath, t).setVisible(true);
             }
         });
     }
@@ -248,7 +277,6 @@ public class VentanaM extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton colocarSucursal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -256,6 +284,8 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton saveFile1;
+    private javax.swing.JButton searchBFS;
+    private javax.swing.JButton searchDFS;
     private javax.swing.JButton setT;
     private javax.swing.JTextField tField;
     private javax.swing.JTextField textField2;

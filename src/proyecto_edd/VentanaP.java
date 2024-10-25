@@ -22,6 +22,7 @@ import javax.swing.filechooser.FileSystemView;
  */
 public class VentanaP extends javax.swing.JFrame {
     private File selectedFile;
+    private int t;
     /**
      * Creates new form MainV
      */
@@ -94,6 +95,14 @@ public class VentanaP extends javax.swing.JFrame {
     if (returnValue == JFileChooser.APPROVE_OPTION){
         selectedFile = fileChooser.getSelectedFile();
         textField.setText(selectedFile.getName());
+        String fileName = selectedFile.getName();
+        if (fileName.equals("Caracas.json")){
+            t = 3;
+        }else if (fileName.equals("Bogota.json")){
+            t = 10;
+        }else{
+            t = 0;
+        }
     }else{
         System.out.println("Error");
     }
@@ -103,7 +112,7 @@ public class VentanaP extends javax.swing.JFrame {
     
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         if (selectedFile != null){
-            VentanaM v2 = new VentanaM(getNewJsonFilePath());
+            VentanaM v2 = new VentanaM(getNewJsonFilePath(), t);
             this.dispose();
             v2.setVisible(true);
         }else{
@@ -116,7 +125,7 @@ public class VentanaP extends javax.swing.JFrame {
     }//GEN-LAST:event_textFieldActionPerformed
 
     public String getNewJsonFilePath(){
-        return new File(selectedFile.getParent(), "New_" + selectedFile.getName()).getPath();
+        return new File(selectedFile.getParent(), selectedFile.getName()).getPath();
     }
     
     /**
