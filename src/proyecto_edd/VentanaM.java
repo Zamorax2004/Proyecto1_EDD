@@ -24,7 +24,7 @@ public class VentanaM extends javax.swing.JFrame {
     /**
      * Creates new form VentanaM
      */
-    public VentanaM(String NewJsonFilePath) {
+    public VentanaM(String newJsonFilePath) {
         this.newJsonFilePath = newJsonFilePath;
         initComponents();
         loadStations();
@@ -52,7 +52,6 @@ public class VentanaM extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jScrollBar1 = new javax.swing.JScrollBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,8 +115,7 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 100, -1));
-        jPanel1.add(jScrollBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, -1, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 170, 210));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -157,7 +155,7 @@ public class VentanaM extends javax.swing.JFrame {
                 File jsonFile = new File(newJsonFilePath);
                 Json jsonReader = new Json(jsonFile);
                 JsonObject jsonObject = jsonReader.readJson();
-
+                DefaultListModel<String> listModel = new DefaultListModel<>();
                 JsonArray metroLines = jsonObject.getAsJsonArray("Metro de Caracas");
                 for (int i = 0; i < metroLines.size(); i++) {
                     JsonObject line = metroLines.get(i).getAsJsonObject();
@@ -175,6 +173,7 @@ public class VentanaM extends javax.swing.JFrame {
                         }
                     }
                 }
+                jList1.setModel(listModel);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -211,7 +210,8 @@ public class VentanaM extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaM().setVisible(true);
+                String newJsonFilePath = ""; 
+                new VentanaM(newJsonFilePath).setVisible(true);
             }
         });
     }
@@ -225,7 +225,6 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton setT;
