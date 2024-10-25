@@ -18,6 +18,7 @@ import javax.swing.DefaultListModel;
 public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
+    private DFSClass dfsClass;
 
     /**
      * Creates new form VentanaM
@@ -26,6 +27,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.newJsonFilePath = newJsonFilePath;
         this.sucursal = new Sucursal(null);
         this.sucursal.setT(t);
+        this.dfsClass = new DFSClass(sucursal, 100);
         initComponents();
         textField2.setEditable(false);
         loadStations();
@@ -75,7 +77,7 @@ public class VentanaM extends javax.swing.JFrame {
                 setTActionPerformed(evt);
             }
         });
-        jPanel1.add(setT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+        jPanel1.add(setT, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
         colocarSucursal.setText("Colocar sucursal");
         colocarSucursal.addActionListener(new java.awt.event.ActionListener() {
@@ -83,7 +85,7 @@ public class VentanaM extends javax.swing.JFrame {
                 colocarSucursalActionPerformed(evt);
             }
         });
-        jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
+        jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         searchDFS.setText("Ver cobertura sucursal (Busqueda a profundidad)");
         searchDFS.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +93,7 @@ public class VentanaM extends javax.swing.JFrame {
                 searchDFSActionPerformed(evt);
             }
         });
-        jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
         jButton5.setText("Revisar cobertura total");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +101,7 @@ public class VentanaM extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
         jButton6.setText("Agregar Linea");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -117,14 +119,14 @@ public class VentanaM extends javax.swing.JFrame {
                 tFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(tField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
+        jPanel1.add(tField, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 50, -1));
 
         textField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textField2ActionPerformed(evt);
             }
         });
-        jPanel1.add(textField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 170, -1));
+        jPanel1.add(textField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 260, -1));
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -144,7 +146,7 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1.add(saveFile1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
 
         searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)");
-        jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
+        jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -198,7 +200,13 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_saveFile1ActionPerformed
 
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
-        // TODO add your handling code here:
+        if (sucursal != null) {
+            int limit = Integer.parseInt(tField.getText());
+            int reachableStations = dfsClass.dfs(limit);
+            textField2.setText("Paradas alcanzables: " + reachableStations);
+        } else {
+            textField2.setText("No se ha colocado la sucursal.");
+        }
     }//GEN-LAST:event_searchDFSActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
