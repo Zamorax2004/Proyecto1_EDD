@@ -1,1 +1,76 @@
-{"Metro de Caracas":[{"Linea 1":[{"Propatria":"propertyValue","propertyKey":"propertyValue"},{"Perez Bonalde":"propertyValue","propertyKey":"propertyValue"},{"Plaza Sucre":"propertyValue","propertyKey":"propertyValue"},{"Gato Negro":"propertyValue","propertyKey":"propertyValue"},{"Agua Salud":"propertyValue","propertyKey":"propertyValue"},{"Canno Amarillo":"propertyValue","propertyKey":"propertyValue"},{"Capitolio":"El Silencio","propertyKey":"propertyValue"},{"La Hoyada":"propertyValue","propertyKey":"propertyValue"},{"Parque Carabobo":"propertyValue","propertyKey":"propertyValue"},{"Bellas Artes":"propertyValue","propertyKey":"propertyValue"},{"Colegio de Ingenieros":"propertyValue","propertyKey":"propertyValue"},{"Plaza Venezuela":"Zona Rental","propertyKey":"propertyValue"},{"Sabana Grande":"propertyValue","propertyKey":"propertyValue"},{"Chacaito":"propertyValue","propertyKey":"propertyValue"},{"Chacao":"propertyValue","propertyKey":"propertyValue"},{"Altamira":"propertyValue","propertyKey":"propertyValue"},{"Miranda":"propertyValue","propertyKey":"propertyValue"},{"Los Dos Caminos":"propertyValue","propertyKey":"propertyValue"},{"Los Cortijos":"propertyValue","propertyKey":"propertyValue"},{"La California":"propertyValue","propertyKey":"propertyValue"},{"Petare":"propertyValue","propertyKey":"propertyValue"},{"Palo Verde":"propertyValue","propertyKey":"propertyValue"}]},{"Linea 2":[{"El Silencio":"Capitolio","propertyKey":"propertyValue"},{"Capuchinos":"propertyValue","propertyKey":"propertyValue"},{"Maternidad":"propertyValue","propertyKey":"propertyValue"},{"Artigas":"propertyValue","propertyKey":"propertyValue"},{"La Paz":"propertyValue","propertyKey":"propertyValue"},{"La Yaguara":"propertyValue","propertyKey":"propertyValue"},{"Carapita":"propertyValue","propertyKey":"propertyValue"},{"Antimano":"propertyValue","propertyKey":"propertyValue"},{"Mamera":"propertyValue","propertyKey":"propertyValue"},{"Caricuao":"propertyValue","propertyKey":"propertyValue"},{"Zoologico":"propertyValue","propertyKey":"propertyValue"}]},{"Linea 3":[{"Plaza Venezuela":"Zona Rental","propertyKey":"propertyValue"},{"Ciudad Universitaria":"propertyValue","propertyKey":"propertyValue"},{"Los Simbolos":"propertyValue","propertyKey":"propertyValue"},{"La Bandera":"propertyValue","propertyKey":"propertyValue"},{"El Valle":"propertyValue","propertyKey":"propertyValue"},{"Los Jardines":"propertyValue","propertyKey":"propertyValue"},{"Coche":"propertyValue","propertyKey":"propertyValue"},{"Mercado":"propertyValue","propertyKey":"propertyValue"},{"La Rinconada":"Caracas","propertyKey":"propertyValue"}]},{"Linea 4":[{"Las Adjuntas":"propertyValue","propertyKey":"propertyValue"},{"Ruiz Pineda":"propertyValue","propertyKey":"propertyValue"},{"Mamera":"propertyValue","propertyKey":"propertyValue"},{"Antimano":"propertyValue","propertyKey":"propertyValue"},{"Carapita":"propertyValue","propertyKey":"propertyValue"},{"La Yaguara":"propertyValue","propertyKey":"propertyValue"},{"La Paz":"propertyValue","propertyKey":"propertyValue"},{"Maternidad":"propertyValue","propertyKey":"propertyValue"},{"Capuchinos":"propertyValue","propertyKey":"propertyValue"},{"Teatros":"propertyValue","propertyKey":"propertyValue"},{"Nuevo Circo":"propertyValue","propertyKey":"propertyValue"},{"Parque Central":"propertyValue","propertyKey":"propertyValue"},{"Zona Rental":"Plaza Venezuela","propertyKey":"propertyValue"},{"Bello Monte":"propertyValue","propertyKey":"propertyValue"}]}]}
+{
+   "Metro de Caracas":[
+      {
+         "Linea 1":[
+            "Propatria",
+            "Perez Bonalde",
+            "Plaza Sucre",
+            "Gato Negro",
+            "Agua Salud",
+            "Canno Amarillo",
+            {"Capitolio":"El Silencio"},
+            "La Hoyada",
+            "Parque Carabobo",
+            "Bellas Artes",
+            "Colegio de Ingenieros",
+            {"Plaza Venezuela":"Zona Rental"},
+            "Sabana Grande",
+            "Chacaito",
+            "Chacao",
+            "Altamira",
+            "Miranda",
+            "Los Dos Caminos",
+            "Los Cortijos",
+            "La California",
+            "Petare",
+            "Palo Verde"
+         ]
+      },
+      {
+         "Linea 2":[
+            {"El Silencio":"Capitolio"},
+            "Capuchinos",
+            "Maternidad",
+            "Artigas",
+            "La Paz",
+            "La Yaguara",
+            "Carapita",
+            "Antimano",
+            "Mamera",
+            "Caricuao",
+            "Zoologico"
+         ]
+      },
+      {
+         "Linea 3":[
+            {"Plaza Venezuela":"Zona Rental"},
+            "Ciudad Universitaria",
+            "Los Simbolos",
+            "La Bandera",
+            "El Valle",
+            "Los Jardines",
+            "Coche",
+            "Mercado",
+            {"La Rinconada":"Caracas"}
+         ]
+      },
+      {
+         "Linea 4":[
+            "Las Adjuntas",
+            "Ruiz Pineda",
+            "Mamera",
+            "Antimano",
+            "Carapita",
+            "La Yaguara",
+            "La Paz",
+            "Maternidad",
+            "Capuchinos",
+            "Teatros",
+            "Nuevo Circo",
+            "Parque Central",
+            {"Zona Rental":"Plaza Venezuela"},
+            "Bello Monte"
+         ]
+      }
+   ]
+}

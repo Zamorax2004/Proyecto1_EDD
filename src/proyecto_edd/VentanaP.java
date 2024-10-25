@@ -27,6 +27,7 @@ public class VentanaP extends javax.swing.JFrame {
      */
     public VentanaP() {
         initComponents();
+        textField.setEditable(false);
     }
 
     /**
@@ -115,13 +116,23 @@ public class VentanaP extends javax.swing.JFrame {
     }//GEN-LAST:event_NextActionPerformed
 
     private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
-        textField.setEditable(false);
+
     }//GEN-LAST:event_textFieldActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        if (selectedFile != null){
-            readJson();
-        }else{
+        if (selectedFile != null) {
+            try {
+                Json jsonFile = new Json(selectedFile);
+                JsonObject jsonObject = jsonFile.readJson();
+                System.out.println("JSON: " + jsonObject);
+                File newFile = new File(selectedFile.getParent(), "New_" + selectedFile.getName());
+                Json newJsonFile = new Json(newFile);
+                newJsonFile.writeJson(jsonObject);
+                System.out.println("JSON guardado con exito");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
             System.out.println("No se detecta ningun archivo");
         }
     }//GEN-LAST:event_saveFileActionPerformed
