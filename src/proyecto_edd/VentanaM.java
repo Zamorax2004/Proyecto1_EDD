@@ -49,7 +49,7 @@ public class VentanaM extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         tField = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        textField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
 
@@ -75,6 +75,11 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1.add(setT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
         colocarSucursal.setText("Colocar sucursal");
+        colocarSucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colocarSucursalActionPerformed(evt);
+            }
+        });
         jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
 
         jButton4.setText("Ver cobertura sucursal");
@@ -101,12 +106,12 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(tField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        textField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                textField2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 170, -1));
+        jPanel1.add(textField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 170, -1));
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -145,9 +150,13 @@ public class VentanaM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_setTActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    private void textField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField2ActionPerformed
+        textField2.setText()
+    }//GEN-LAST:event_textField2ActionPerformed
+
+    private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
+        
+    }//GEN-LAST:event_colocarSucursalActionPerformed
 
     private void loadStations() {
         if (newJsonFilePath != null) {
@@ -226,8 +235,8 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton setT;
     private javax.swing.JTextField tField;
+    private javax.swing.JTextField textField2;
     // End of variables declaration//GEN-END:variables
 }
