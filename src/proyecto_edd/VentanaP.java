@@ -110,7 +110,7 @@ public class VentanaP extends javax.swing.JFrame {
     
     
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
-        VentanaM v2 = new VentanaM();
+        VentanaM v2 = new VentanaM(getNewJsonFilePath());
         this.dispose();
         v2.setVisible(true);
     }//GEN-LAST:event_NextActionPerformed
@@ -137,6 +137,10 @@ public class VentanaP extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveFileActionPerformed
 
+    public String getNewJsonFilePath(){
+        return new File(selectedFile.getParent(), "New_" + selectedFile.getName()).getPath();
+    }
+    
     /**
      * @param args the command line arguments
      */

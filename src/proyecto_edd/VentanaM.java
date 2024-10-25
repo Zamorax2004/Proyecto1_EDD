@@ -4,18 +4,32 @@
  */
 package proyecto_edd;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
+
 /**
  *
  * @author simon
  */
 public class VentanaM extends javax.swing.JFrame {
+    private DefaultListModel<String> listModel;
+    private JList<String> stationList;
+    private String newJsonFilePath;
 
     /**
      * Creates new form VentanaM
      */
-    public VentanaM() {
+    public VentanaM(String NewJsonFilePath) {
+        this.newJsonFilePath = newJsonFilePath;
         initComponents();
+        loadStations();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,12 +43,16 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         setT = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        colocarSucursal = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         tField = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollBar1 = new javax.swing.JScrollBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -57,8 +75,8 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(setT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
-        jButton3.setText("Colocar sucursal");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
+        colocarSucursal.setText("Colocar sucursal");
+        jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, -1, -1));
 
         jButton4.setText("Ver cobertura sucursal");
         jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
@@ -83,6 +101,23 @@ public class VentanaM extends javax.swing.JFrame {
             }
         });
         jPanel1.add(tField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 170, -1));
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 100, -1));
+        jPanel1.add(jScrollBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -112,6 +147,40 @@ public class VentanaM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_setTActionPerformed
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void loadStations() {
+        if (newJsonFilePath != null) {
+            try {
+                File jsonFile = new File(newJsonFilePath);
+                Json jsonReader = new Json(jsonFile);
+                JsonObject jsonObject = jsonReader.readJson();
+
+                JsonArray metroLines = jsonObject.getAsJsonArray("Metro de Caracas");
+                for (int i = 0; i < metroLines.size(); i++) {
+                    JsonObject line = metroLines.get(i).getAsJsonObject();
+                    for (String key : line.keySet()) {
+                        JsonArray stations = line.getAsJsonArray(key);
+                        for (int j = 0; j < stations.size(); j++) {
+                            if (stations.get(j).isJsonObject()) {
+                                JsonObject stationObject = stations.get(j).getAsJsonObject();
+                                for (String stationName : stationObject.keySet()) {
+                                    listModel.addElement(stationName + " - " + stationObject.get(stationName).getAsString());
+                                }
+                            } else {
+                                listModel.addElement(stations.get(j).getAsString());
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -148,13 +217,17 @@ public class VentanaM extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton colocarSucursal;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollBar jScrollBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton setT;
     private javax.swing.JTextField tField;
     // End of variables declaration//GEN-END:variables
