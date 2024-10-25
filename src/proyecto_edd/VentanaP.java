@@ -4,7 +4,6 @@
  */
 package proyecto_edd;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -102,54 +101,12 @@ public class VentanaP extends javax.swing.JFrame {
     if (returnValue == JFileChooser.APPROVE_OPTION){
         selectedFile = fileChooser.getSelectedFile();
         textField.setText(selectedFile.getName());
-        readJson();
     }else{
         System.out.println("Error");
     }
-    
     }//GEN-LAST:event_openFileChooserActionPerformed
-    private void readJson(){
-        if (selectedFile != null){
-            try (FileReader reader = new FileReader(selectedFile)){
-                JsonElement jsonElement = JsonParser.parseReader(reader);
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-                modifyJson(jsonObject);
-                try (FileWriter writer = new FileWriter(selectedFile)){
-                    writer.write(jsonObject.toString());
-                }
-                System.out.println("JSON se modificó con exito");
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }else{
-            System.out.println("No seleccionó un archivo");
-        }
-    }
     
-    private void modifyJson(JsonObject jsonObject) {
-        JsonArray metroDeCaracas = jsonObject.getAsJsonArray("Metro de Caracas");
-
-        for (JsonElement lineElement : metroDeCaracas) {
-            JsonObject lineObject = lineElement.getAsJsonObject();
-            for (String lineKey : lineObject.keySet()) {
-                JsonArray stationsArray = lineObject.getAsJsonArray(lineKey);
-                for (int i = 0; i < stationsArray.size(); i++) {
-                    JsonElement stationElement = stationsArray.get(i);
-                    if (stationElement.isJsonObject()) {
-                        JsonObject stationObject = stationElement.getAsJsonObject();
-                        for (String stationKey : stationObject.keySet()) {
-                            stationObject.addProperty("Linea", "1"); // Add your property here
-                        }
-                    } else if (stationElement.isJsonPrimitive()) {
-                        String stationName = stationElement.getAsString();
-                        JsonObject newStationObject = new JsonObject();
-                        newStationObject.addProperty(stationName, "propertyValue"); // Add your property here
-                        stationsArray.set(i, newStationObject);
-                    }
-                }
-            }
-        }
-    }
+    
     
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         VentanaM v2 = new VentanaM();
@@ -158,7 +115,7 @@ public class VentanaP extends javax.swing.JFrame {
     }//GEN-LAST:event_NextActionPerformed
 
     private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
-        // TODO add your handling code here:
+        textField.setEditable(false);
     }//GEN-LAST:event_textFieldActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
