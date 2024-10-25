@@ -17,9 +17,8 @@ import javax.swing.JList;
  * @author simon
  */
 public class VentanaM extends javax.swing.JFrame {
-    private DefaultListModel<String> listModel;
-    private JList<String> stationList;
     private String newJsonFilePath;
+    private Sucursal sucursal;
 
     /**
      * Creates new form VentanaM
@@ -27,6 +26,7 @@ public class VentanaM extends javax.swing.JFrame {
     public VentanaM(String newJsonFilePath) {
         this.newJsonFilePath = newJsonFilePath;
         initComponents();
+        textField2.setEditable(false);
         loadStations();
     }
 
@@ -52,6 +52,7 @@ public class VentanaM extends javax.swing.JFrame {
         textField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        saveFile1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -120,7 +121,15 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 170, 210));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 210, 210));
+
+        saveFile1.setText("Guardar Archivo");
+        saveFile1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFile1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(saveFile1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -151,12 +160,22 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_setTActionPerformed
 
     private void textField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField2ActionPerformed
-        textField2.setText()
+            
     }//GEN-LAST:event_textField2ActionPerformed
 
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-        
+        String selectedStation = jList1.getSelectedValue();
+        if (selectedStation != null){
+            sucursal = new Sucursal(selectedStation);
+            textField2.setText(sucursal.getStation().toString());
+        }else{
+            textField2.setText("No se ha seleccionado una parada");
+        }
     }//GEN-LAST:event_colocarSucursalActionPerformed
+
+    private void saveFile1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile1ActionPerformed
+         
+    }//GEN-LAST:event_saveFile1ActionPerformed
 
     private void loadStations() {
         if (newJsonFilePath != null) {
@@ -165,7 +184,8 @@ public class VentanaM extends javax.swing.JFrame {
                 Json jsonReader = new Json(jsonFile);
                 JsonObject jsonObject = jsonReader.readJson();
                 DefaultListModel<String> listModel = new DefaultListModel<>();
-                JsonArray metroLines = jsonObject.getAsJsonArray("Metro de Caracas");
+                String cityKey = jsonObject.keySet().iterator().next();
+                JsonArray metroLines = jsonObject.getAsJsonArray(cityKey);
                 for (int i = 0; i < metroLines.size(); i++) {
                     JsonObject line = metroLines.get(i).getAsJsonObject();
                     for (String key : line.keySet()) {
@@ -235,6 +255,7 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton saveFile1;
     private javax.swing.JButton setT;
     private javax.swing.JTextField tField;
     private javax.swing.JTextField textField2;

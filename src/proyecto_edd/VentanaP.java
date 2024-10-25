@@ -44,7 +44,6 @@ public class VentanaP extends javax.swing.JFrame {
         openFileChooser = new javax.swing.JButton();
         Next = new javax.swing.JButton();
         textField = new javax.swing.JTextField();
-        saveFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -64,13 +63,14 @@ public class VentanaP extends javax.swing.JFrame {
         });
         jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, -1, -1));
 
+        Next.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Next.setText("Next");
         Next.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NextActionPerformed(evt);
             }
         });
-        jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, -1, -1));
+        jPanel1.add(Next, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 320, 70, 40));
 
         textField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,14 +78,6 @@ public class VentanaP extends javax.swing.JFrame {
             }
         });
         jPanel1.add(textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 170, -1));
-
-        saveFile.setText("Guardar Archivo");
-        saveFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveFileActionPerformed(evt);
-            }
-        });
-        jPanel1.add(saveFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 340, 190, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 390));
 
@@ -110,32 +102,18 @@ public class VentanaP extends javax.swing.JFrame {
     
     
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
-        VentanaM v2 = new VentanaM(getNewJsonFilePath());
-        this.dispose();
-        v2.setVisible(true);
+        if (selectedFile != null){
+            VentanaM v2 = new VentanaM(getNewJsonFilePath());
+            this.dispose();
+            v2.setVisible(true);
+        }else{
+            textField.setText("Seleccione un archivo!");
+        }
     }//GEN-LAST:event_NextActionPerformed
 
     private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
 
     }//GEN-LAST:event_textFieldActionPerformed
-
-    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        if (selectedFile != null) {
-            try {
-                Json jsonFile = new Json(selectedFile);
-                JsonObject jsonObject = jsonFile.readJson();
-                System.out.println("JSON: " + jsonObject);
-                File newFile = new File(selectedFile.getParent(), "New_" + selectedFile.getName());
-                Json newJsonFile = new Json(newFile);
-                newJsonFile.writeJson(jsonObject);
-                System.out.println("JSON guardado con exito");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("No se detecta ningun archivo");
-        }
-    }//GEN-LAST:event_saveFileActionPerformed
 
     public String getNewJsonFilePath(){
         return new File(selectedFile.getParent(), "New_" + selectedFile.getName()).getPath();
@@ -182,7 +160,6 @@ public class VentanaP extends javax.swing.JFrame {
     private javax.swing.JLabel Title;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton openFileChooser;
-    private javax.swing.JButton saveFile;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
 }

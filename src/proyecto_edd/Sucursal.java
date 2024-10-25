@@ -24,5 +24,4 @@ public class Sucursal {
     public void setStation(Object station) {
         this.station = station;
     }
-    
 }
