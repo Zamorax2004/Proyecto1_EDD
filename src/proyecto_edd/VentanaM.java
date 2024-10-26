@@ -19,6 +19,7 @@ public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
     private DFSClass dfsClass;
+    private Lista sucursales = new Lista();
 
     /**
      * Creates new form VentanaM
@@ -168,17 +169,27 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_tFieldActionPerformed
 
     private void setTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTActionPerformed
-        try{
-            int t = Integer.parseInt(tField.getText());
-            if (sucursal != null){
-                sucursal.setT(t);
-                System.out.println("t: " + t);
-            }else{
+         try {
+        int t;
+        if (tField.getText().isEmpty()) {
+            if (sucursal != null) {
+                t = sucursal.getT();
+                System.out.println("Variable t predeterminada: " + t);
+            } else {
                 System.out.println("La sucursal no esta seleccionada");
             }
-        }catch (NumberFormatException e){
-            System.out.println("Error. Ingrese un numero entero.");
+        } else {
+            t = Integer.parseInt(tField.getText());
+            if (sucursal != null) {
+                sucursal.setT(t);
+                System.out.println("t: " + t);
+            } else {
+                System.out.println("La sucursal no esta seleccionada");
+            }
         }
+    } catch (NumberFormatException e) {
+        System.out.println("Error. Ingrese un numero entero.");
+    }
     }//GEN-LAST:event_setTActionPerformed
 
     private void textField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField2ActionPerformed
@@ -188,8 +199,9 @@ public class VentanaM extends javax.swing.JFrame {
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
         String station = jList1.getSelectedValue();
         if (station != null){
-            sucursal = new Sucursal(station);
-            textField2.setText(sucursal.getStation().toString());
+            Sucursal newSucursal = new Sucursal(station);
+            sucursales.add(newSucursal);
+            textField2.setText(newSucursal.getStation().toString());
         }else{
             textField2.setText("No se ha seleccionado una parada");
         }

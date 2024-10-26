@@ -47,6 +47,7 @@ public class DFSClass {
         if (index == -1 || visited[index]) return 0;
         visited[index] = true;
         int count = 1;
+        System.out.println("Parada: " + station);
         for (int i = 1; i < stationCount; i++) {
             if (adjacencyList[index][i] != null && !visited[i]) {
                 count += dfsHelper(adjacencyList[index][i], limit - 1, visited);
