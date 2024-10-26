@@ -23,6 +23,13 @@ public class Grafo {
             graph.addEdge(edgeId, station1, station2);
         }
     }
+    
+    public void removeStation(String station) {
+        Node node = graph.getNode(station);
+        if (node != null) {
+            graph.removeNode(station);
+        }
+    }
 
     public void display() {
         for (Node node : graph) {

@@ -32,6 +32,15 @@ public class Sucursal {
      public void addStation(Object station) {
         stations.add(station);
     }
+     
+    public void removeStation(Object station) {
+        for (int i = 0; i < stations.size(); i++) {
+            if (stations.get(i).equals(station)) {
+                stations.remove(i);
+                break;
+            }
+        }
+    }
 
     public void addConnection(Object station1, Object station2) {
         connections.add(new String[]{station1.toString(), station2.toString()});

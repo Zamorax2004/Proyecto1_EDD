@@ -17,6 +17,20 @@ public class BFSClass {
             stationCount++;
         }
     }
+    
+    public void removeStation(Object station) {
+        int index = findStationIndex(station);
+        if (index != -1) {
+            for (int i = 0; i < stationCount; i++) {
+                adjacencyList[index][i] = null;
+                adjacencyList[i][index] = null;
+            }
+            for (int i = index; i < stationCount - 1; i++) {
+                adjacencyList[i] = adjacencyList[i + 1];
+            }
+            stationCount--;
+        }
+    }
 
     public void addEdge(Object station1, Object station2) {
         int index1 = findStationIndex(station1);
@@ -38,7 +52,7 @@ public class BFSClass {
 
     public int bfs(int limit) {
         if (stationCount == 0) {
-            throw new IllegalStateException("No stations have been added.");
+            throw new IllegalStateException("No se han agregado paradas");
         }
         boolean[] visited = new boolean[stationCount];
         return bfsHelper(sucursal.getStation(), limit, visited);
@@ -49,16 +63,28 @@ public class BFSClass {
         int front = 0;
         int rear = 0;
 
+        int startIndex = findStationIndex(startStation);
+        if (startIndex == -1 || startIndex >= visited.length) {
+            throw new IndexOutOfBoundsException("Fuera de limite");
+        }
+
         queue[rear++] = startStation;
-        visited[findStationIndex(startStation)] = true;
+        visited[startIndex] = true;
         int count = 1;
 
         while (front != rear && limit-- > 0) {
             Object station = queue[front++];
             int index = findStationIndex(station);
 
+            if (index == -1 || index >= visited.length) {
+                throw new IndexOutOfBoundsException("Fuera de limite");
+            }
+
             for (int i = 1; i < stationCount; i++) {
                 if (adjacencyList[index][i] != null && !visited[i]) {
+                    if (rear >= queue.length) {
+                        throw new IndexOutOfBoundsException("Fuera de limite");
+                    }
                     queue[rear++] = adjacencyList[index][i];
                     visited[i] = true;
                     count++;

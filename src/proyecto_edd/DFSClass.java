@@ -17,6 +17,20 @@ public class DFSClass {
             stationCount++;
         }
     }
+    
+    public void removeStation(Object station) {
+        int index = findStationIndex(station);
+        if (index != -1) {
+            for (int i = 0; i < stationCount; i++) {
+                adjacencyList[index][i] = null;
+                adjacencyList[i][index] = null;
+            }
+            for (int i = index; i < stationCount - 1; i++) {
+                adjacencyList[i] = adjacencyList[i + 1];
+            }
+            stationCount--;
+        }
+    }
 
     public void addEdge(Object station1, Object station2) {
         int index1 = findStationIndex(station1);
