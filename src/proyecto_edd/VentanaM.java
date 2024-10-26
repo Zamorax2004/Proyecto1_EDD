@@ -154,6 +154,11 @@ public class VentanaM extends javax.swing.JFrame {
         jPanel1.add(saveFile1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
 
         searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)");
+        searchBFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBFSActionPerformed(evt);
+            }
+        });
         jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
@@ -245,6 +250,28 @@ public class VentanaM extends javax.swing.JFrame {
         }
         grafo.display();
     }//GEN-LAST:event_displayGrafoActionPerformed
+
+    private void searchBFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBFSActionPerformed
+        if (sucursal != null) {
+            int limit = Integer.parseInt(tField.getText());
+            BFSClass bfsClass = new BFSClass(sucursal, 100); 
+        for (int i = 0; i < sucursal.getStations().size(); i++) {
+            bfsClass.addStation(sucursal.getStations().get(i));
+        }
+        for (int i = 0; i < sucursal.getConnections().size(); i++) {
+            String[] connection = (String[]) sucursal.getConnections().get(i);
+            bfsClass.addEdge(connection[0], connection[1]);
+        }
+        try {
+            int reachableStations = bfsClass.bfs(limit);
+            textField2.setText("Paradas alcanzables: " + reachableStations);
+        } catch (IndexOutOfBoundsException e) {
+            textField2.setText("Error: " + e.getMessage());
+        }
+    } else {
+        textField2.setText("No se ha colocado la sucursal.");
+    }
+    }//GEN-LAST:event_searchBFSActionPerformed
 
     private void loadStations() {
         if (newJsonFilePath != null) {

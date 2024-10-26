@@ -14,12 +14,14 @@ public class Lista {
             resize();
         }
         elements[size++] = element;
+        System.out.println("Added element: " + element + ", current size: " + size);
     }
 
     public Object get(int index) {
         if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
+        System.out.println("Accessed element at index: " + index + ", element: " + elements[index]);
         return elements[index];
     }
 
@@ -28,8 +30,10 @@ public class Lista {
     }
 
     private void resize() {
+        System.out.println("Resizing array, current capacity: " + elements.length);
         Object[] newElements = new Object[elements.length * 2];
         System.arraycopy(elements, 0, newElements, 0, elements.length);
         elements = newElements;
+        System.out.println("Resized array, new capacity: " + elements.length);
     }
 }
