@@ -52,8 +52,8 @@ public class VentanaP extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Title.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        Title.setText("Titulo");
-        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 50, 170, -1));
+        Title.setText("Sucursales de Supermercado");
+        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 470, -1));
 
         openFileChooser.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         openFileChooser.setText("Escoger Archivo");
@@ -62,7 +62,7 @@ public class VentanaP extends javax.swing.JFrame {
                 openFileChooserActionPerformed(evt);
             }
         });
-        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, -1, -1));
+        jPanel1.add(openFileChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, -1, -1));
 
         Next.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Next.setText("Next");
@@ -78,7 +78,7 @@ public class VentanaP extends javax.swing.JFrame {
                 textFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 170, -1));
+        jPanel1.add(textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, 140, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 390));
 

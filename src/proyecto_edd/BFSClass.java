@@ -37,6 +37,9 @@ public class BFSClass {
     }
 
     public int bfs(int limit) {
+        if (stationCount == 0) {
+            throw new IllegalStateException("No stations have been added.");
+        }
         boolean[] visited = new boolean[stationCount];
         return bfsHelper(sucursal.getStation(), limit, visited);
     }

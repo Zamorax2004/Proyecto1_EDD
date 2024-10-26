@@ -19,6 +19,7 @@ public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
     private DFSClass dfsClass;
+    private BFSClass bfsClass;
     private Lista sucursales = new Lista();
     private Grafo grafo;
 
@@ -30,6 +31,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.sucursal = new Sucursal(null);
         this.sucursal.setT(t);
         this.dfsClass = new DFSClass(sucursal, 100);
+        this.bfsClass = new BFSClass(sucursal, 100);
         this.grafo = new Grafo();
         initComponents();
         textField2.setEditable(false);
@@ -210,11 +212,12 @@ public class VentanaM extends javax.swing.JFrame {
 
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
         String station = jList1.getSelectedValue();
-        if (station != null){
-            Sucursal newSucursal = new Sucursal(station);
-            sucursales.add(newSucursal);
-            textField2.setText(newSucursal.getStation().toString());
-        }else{
+        if (station != null) {
+            sucursal.addStation(station);
+            dfsClass.addStation(station); 
+            bfsClass.addStation(station); // Add to BFS class
+            textField2.setText(station + " added.");
+        } else {
             textField2.setText("No se ha seleccionado una parada");
         }
     }//GEN-LAST:event_colocarSucursalActionPerformed
@@ -226,6 +229,14 @@ public class VentanaM extends javax.swing.JFrame {
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
         if (sucursal != null) {
             int limit = Integer.parseInt(tField.getText());
+            dfsClass = new DFSClass(sucursal, 100);
+            for (int i = 0; i < sucursal.getStations().size(); i++) {
+                dfsClass.addStation(sucursal.getStations().get(i));
+            }
+            for (int i = 0; i < sucursal.getConnections().size(); i++) {
+                String[] connection = (String[]) sucursal.getConnections().get(i);
+                dfsClass.addEdge(connection[0], connection[1]);
+            }
             int reachableStations = dfsClass.dfs(limit);
             textField2.setText("Paradas alcanzables: " + reachableStations);
         } else {
@@ -266,7 +277,7 @@ public class VentanaM extends javax.swing.JFrame {
             int reachableStations = bfsClass.bfs(limit);
             textField2.setText("Paradas alcanzables: " + reachableStations);
         } catch (IndexOutOfBoundsException e) {
-            textField2.setText("Error: " + e.getMessage());
+            textField2.setText("Excedio el limite");
         }
     } else {
         textField2.setText("No se ha colocado la sucursal.");

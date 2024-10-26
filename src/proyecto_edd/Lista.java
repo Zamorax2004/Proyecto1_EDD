@@ -16,6 +16,19 @@ public class Lista {
         elements[size++] = element;
         System.out.println("Added element: " + element + ", current size: " + size);
     }
+    
+    public boolean remove(Object element) {
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(element)) {
+                System.arraycopy(elements, i + 1, elements, i, size - i - 1);
+                elements[--size] = null; // Clear the last element
+                System.out.println("Removed element: " + element + ", current size: " + size);
+                return true;
+            }
+        }
+        System.out.println("Element not found: " + element);
+        return false;
+    }
 
     public Object get(int index) {
         if (index >= size || index < 0) {
