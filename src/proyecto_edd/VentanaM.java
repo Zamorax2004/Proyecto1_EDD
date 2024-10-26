@@ -15,6 +15,7 @@ import javax.swing.DefaultListModel;
  *
  * @author simon
  */
+//Ventana principal donde estan todas las funciones del programa (exceptuando agregar linea  y revisar cobertura total)
 public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
@@ -140,17 +141,17 @@ public class VentanaM extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //Boton para retroceder a la ventana anterior
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         VentanaP v1 = new VentanaP();
         this.dispose();
         v1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    //Boton para introducirvariable "t"
     private void tFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tFieldActionPerformed
         
     }//GEN-LAST:event_tFieldActionPerformed
-
+    //Boton para confirmar variable "t"
     private void setTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTActionPerformed
          try {
         int t;
@@ -174,11 +175,11 @@ public class VentanaM extends javax.swing.JFrame {
         System.out.println("Error. Ingrese un numero entero.");
     }
     }//GEN-LAST:event_setTActionPerformed
-
+    //Boton para mostrar sucursales y acciones relacionadas
     private void textField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField2ActionPerformed
             
     }//GEN-LAST:event_textField2ActionPerformed
-
+    //Boton para confirmar sucursal seleccionada y añadirla a una lista o removerla
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
         String station = jList1.getSelectedValue();
         if (station != null) {
@@ -199,7 +200,7 @@ public class VentanaM extends javax.swing.JFrame {
             textField2.setText("No se ha seleccionado una parada");
         }
     }//GEN-LAST:event_colocarSucursalActionPerformed
-
+    //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
         if (sucursal != null) {
             int limit = Integer.parseInt(tField.getText());
@@ -217,7 +218,7 @@ public class VentanaM extends javax.swing.JFrame {
             textField2.setText("No se ha colocado la sucursal.");
         }
     }//GEN-LAST:event_searchDFSActionPerformed
-
+    //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
         grafo = new Grafo();
         Lista stations = sucursal.getStations();
@@ -231,7 +232,7 @@ public class VentanaM extends javax.swing.JFrame {
         }
         grafo.display();
     }//GEN-LAST:event_displayGrafoActionPerformed
-
+    //Boton de Busqueda en Amplitud
     private void searchBFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBFSActionPerformed
         if (sucursal != null) {
             int limit = Integer.parseInt(tField.getText());
@@ -253,7 +254,7 @@ public class VentanaM extends javax.swing.JFrame {
             textField2.setText("No se ha colocado una sucursal");
         }
     }//GEN-LAST:event_searchBFSActionPerformed
-
+    //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
         if (newJsonFilePath != null) {
             try {

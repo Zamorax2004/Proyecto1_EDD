@@ -1,23 +1,24 @@
 package proyecto_edd;
 
+//Esta clase representa el tipo de busqueda en profundidad implementada para un grafo de paradas
 public class DFSClass {
     private Sucursal sucursal;
     private Object[][] adjacencyList;
     private int stationCount;
-
+    //Constructor
     public DFSClass(Sucursal sucursal, int maxStations) {
         this.sucursal = sucursal;
         this.adjacencyList = new Object[maxStations][maxStations];
         this.stationCount = 0;
     }
-
+    //Añade una parada al grafo
     public void addStation(Object newStation) {
         if (stationCount < adjacencyList.length) {
             adjacencyList[stationCount][0] = newStation;
             stationCount++;
         }
     }
-    
+    //Quita una parada del grafo
     public void removeStation(Object station) {
         int index = findStationIndex(station);
         if (index != -1) {
@@ -31,7 +32,7 @@ public class DFSClass {
             stationCount--;
         }
     }
-
+    //Añade un edge al grafo
     public void addEdge(Object station1, Object station2) {
         int index1 = findStationIndex(station1);
         int index2 = findStationIndex(station2);
@@ -40,7 +41,7 @@ public class DFSClass {
             adjacencyList[index2][index1] = station1;
         }
     }
-
+    //Funcion para buscar el indice de una parada en la lista de adyacencia
     private int findStationIndex(Object station) {
         for (int i = 0; i < stationCount; i++) {
             if (adjacencyList[i][0].equals(station)) {
@@ -49,12 +50,12 @@ public class DFSClass {
         }
         return -1;
     }
-
+    //Realiza un DFS
     public int dfs(int limit) {
         boolean[] visited = new boolean[stationCount];
         return dfsHelper(sucursal.getStation(), limit, visited);
     }
-
+    //Ayuda a realizar un DFS
     private int dfsHelper(Object station, int limit, boolean[] visited) {
         if (limit < 0) return 0;
         int index = findStationIndex(station);

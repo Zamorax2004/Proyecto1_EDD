@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileSystemView;
  *
  * @author simon
  */
+//JFrame inicial con el proposito de elegir el archivo, falto adornar
 public class VentanaP extends javax.swing.JFrame {
     private File selectedFile;
     private int t;
@@ -84,7 +85,7 @@ public class VentanaP extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //Boton para escoger el archivo
     private void openFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileChooserActionPerformed
     JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
     fileChooser.setAcceptAllFileFilterUsed(false);
@@ -109,7 +110,7 @@ public class VentanaP extends javax.swing.JFrame {
     }//GEN-LAST:event_openFileChooserActionPerformed
     
     
-    
+    //Boton para ir a la siguiente ventana
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         if (selectedFile != null){
             VentanaM v2 = new VentanaM(getNewJsonFilePath(), t);
@@ -120,10 +121,12 @@ public class VentanaP extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_NextActionPerformed
 
+    //Boton para mostrar texto
     private void textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldActionPerformed
 
     }//GEN-LAST:event_textFieldActionPerformed
-
+    
+    //Obtiene el path del archivo seleccionado
     public String getNewJsonFilePath(){
         return new File(selectedFile.getParent(), selectedFile.getName()).getPath();
     }

@@ -1,23 +1,23 @@
 package proyecto_edd;
-
+//Esta clase representa el tipo de busqueda en amplitud implementada para un grafo de parada
 public class BFSClass {
     private Sucursal sucursal;
     private Object[][] adjacencyList;
     private int stationCount;
-
+    //Constructor
     public BFSClass(Sucursal sucursal, int maxStations) {
         this.sucursal = sucursal;
         this.adjacencyList = new Object[maxStations][maxStations];
         this.stationCount = 0;
     }
-
+    //Añade una parada al grafo
     public void addStation(Object newStation) {
         if (stationCount < adjacencyList.length) {
             adjacencyList[stationCount][0] = newStation;
             stationCount++;
         }
     }
-    
+    //Quita una parada del grafo
     public void removeStation(Object station) {
         int index = findStationIndex(station);
         if (index != -1) {
@@ -31,7 +31,7 @@ public class BFSClass {
             stationCount--;
         }
     }
-
+    //Añade un edge al grafo
     public void addEdge(Object station1, Object station2) {
         int index1 = findStationIndex(station1);
         int index2 = findStationIndex(station2);
@@ -40,7 +40,7 @@ public class BFSClass {
             adjacencyList[index2][index1] = station1;
         }
     }
-
+    //Metodo para encontrar el indice de una parada en una lista de adyacencia
     private int findStationIndex(Object station) {
         for (int i = 0; i < stationCount; i++) {
             if (adjacencyList[i][0].equals(station)) {
@@ -49,7 +49,7 @@ public class BFSClass {
         }
         return -1;
     }
-
+    //Realiza una operacion BFS
     public int bfs(int limit) {
         if (stationCount == 0) {
             throw new IllegalStateException("No se han agregado paradas");
@@ -57,7 +57,7 @@ public class BFSClass {
         boolean[] visited = new boolean[stationCount];
         return bfsHelper(sucursal.getStation(), limit, visited);
     }
-
+    //Ayuda a realizar la operacion BFS
     private int bfsHelper(Object startStation, int limit, boolean[] visited) {
         Object[] queue = new Object[stationCount];
         int front = 0;
