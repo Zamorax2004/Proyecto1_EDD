@@ -4,21 +4,30 @@ import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
 public class Grafo {
-    public static void main(String[] args) {
+    private Graph graph;
+
+    public Grafo() {
         System.setProperty("org.graphstream.ui", "swing");
-        Graph graph = new SingleGraph("example");
+        graph = new SingleGraph("Grafo");
+    }
 
-        // Add nodes
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addNode("C");
+    public void addStation(String station) {
+        if (graph.getNode(station) == null) {
+            graph.addNode(station).setAttribute("ui.label", station);
+        }
+    }
 
-        // Add edges
-        graph.addEdge("AB", "A", "B");
-        graph.addEdge("BC", "B", "C");
-        graph.addEdge("CA", "C", "A");
+    public void addConnection(String station1, String station2) {
+        String edgeId = station1 + "-" + station2;
+        if (graph.getEdge(edgeId) == null) {
+            graph.addEdge(edgeId, station1, station2);
+        }
+    }
 
-        // Display the graph
+    public void display() {
+        for (Node node : graph) {
+            node.setAttribute("ui.label", node.getId());
+        }
         graph.display();
     }
 }

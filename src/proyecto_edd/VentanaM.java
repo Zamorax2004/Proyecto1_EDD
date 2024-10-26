@@ -20,6 +20,7 @@ public class VentanaM extends javax.swing.JFrame {
     private Sucursal sucursal;
     private DFSClass dfsClass;
     private Lista sucursales = new Lista();
+    private Grafo grafo;
 
     /**
      * Creates new form VentanaM
@@ -29,6 +30,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.sucursal = new Sucursal(null);
         this.sucursal.setT(t);
         this.dfsClass = new DFSClass(sucursal, 100);
+        this.grafo = new Grafo();
         initComponents();
         textField2.setEditable(false);
         loadStations();
@@ -51,7 +53,7 @@ public class VentanaM extends javax.swing.JFrame {
         searchDFS = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        displayGrafo = new javax.swing.JButton();
         tField = new javax.swing.JTextField();
         textField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -112,8 +114,13 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, -1, -1));
 
-        jButton7.setText("Mostrar Grafo");
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+        displayGrafo.setText("Mostrar Grafo");
+        displayGrafo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayGrafoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(displayGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
 
         tField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,6 +232,20 @@ public class VentanaM extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
+        grafo = new Grafo();
+        Lista stations = sucursal.getStations();
+        Lista connections = sucursal.getConnections();
+        for (int i = 0; i < stations.size(); i++) {
+            grafo.addStation(stations.get(i).toString());
+        }
+        for (int i = 0; i < connections.size(); i++) {
+            String[] connection = (String[]) connections.get(i);
+            grafo.addConnection(connection[0], connection[1]);
+        }
+        grafo.display();
+    }//GEN-LAST:event_displayGrafoActionPerformed
+
     private void loadStations() {
         if (newJsonFilePath != null) {
             try {
@@ -296,10 +317,10 @@ public class VentanaM extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton colocarSucursal;
+    private javax.swing.JButton displayGrafo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
