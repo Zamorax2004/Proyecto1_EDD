@@ -53,14 +53,11 @@ public class VentanaM extends javax.swing.JFrame {
         setT = new javax.swing.JButton();
         colocarSucursal = new javax.swing.JButton();
         searchDFS = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         displayGrafo = new javax.swing.JButton();
         tField = new javax.swing.JTextField();
         textField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        saveFile1 = new javax.swing.JButton();
         searchBFS = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -100,29 +97,13 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
-        jButton5.setText("Revisar cobertura total");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
-
-        jButton6.setText("Agregar Linea");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 330, -1, -1));
-
         displayGrafo.setText("Mostrar Grafo");
         displayGrafo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayGrafoActionPerformed(evt);
             }
         });
-        jPanel1.add(displayGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, -1));
+        jPanel1.add(displayGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         tField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,14 +128,6 @@ public class VentanaM extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 210, 210));
 
-        saveFile1.setText("Guardar Archivo");
-        saveFile1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveFile1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(saveFile1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 320, -1, -1));
-
         searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)");
         searchBFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,10 +146,6 @@ public class VentanaM extends javax.swing.JFrame {
         this.dispose();
         v1.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
 
     private void tFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tFieldActionPerformed
         
@@ -231,10 +200,6 @@ public class VentanaM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_colocarSucursalActionPerformed
 
-    private void saveFile1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile1ActionPerformed
-         
-    }//GEN-LAST:event_saveFile1ActionPerformed
-
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
         if (sucursal != null) {
             int limit = Integer.parseInt(tField.getText());
@@ -252,10 +217,6 @@ public class VentanaM extends javax.swing.JFrame {
             textField2.setText("No se ha colocado la sucursal.");
         }
     }//GEN-LAST:event_searchDFSActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
         grafo = new Grafo();
@@ -366,12 +327,9 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JButton colocarSucursal;
     private javax.swing.JButton displayGrafo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton saveFile1;
     private javax.swing.JButton searchBFS;
     private javax.swing.JButton searchDFS;
     private javax.swing.JButton setT;
