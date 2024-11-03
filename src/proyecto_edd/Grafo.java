@@ -47,9 +47,40 @@ public class Grafo {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
-        graph.setAttribute("ui.stylesheet", "graph { padding: 50px; } node { size: 20px; text-size: 14; text-alignment: at-right; } edge { text-size: 14; fill-color: black; }");
+
+        // Set node styles like a subway map
+        String styleSheet =
+                "graph { padding: 50px; }" +
+                "node { size: 20px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
+                "node.marked { fill-color: red; }" +
+                "edge { text-size: 14; fill-color: black; }" +
+                "edge.marked { fill-color: red; }";
+
+        graph.setAttribute("ui.stylesheet", styleSheet);
         Viewer viewer = graph.display();
         viewer.disableAutoLayout();
+
+        // Adjust node positions for better layout
+        double xIncrement = 100.0;
+        double yIncrement = 100.0;
+        double x = 0.0;
+        double y = 0.0;
+
+        for (Node node : graph) {
+            double[] pos = nodePositions.get(node.getId());
+            if (pos != null) {
+                // Adjust positions programmatically for subway station layout
+                node.setAttribute("xyz", pos[0], pos[1], 0);
+            } else {
+                // New layout logic
+                node.setAttribute("xyz", x, y, 0);
+                x += xIncrement;
+                if (x > 500) { // Reset x and increment y to create a grid-like layout
+                    x = 0;
+                    y += yIncrement;
+                }
+            }
+        }
     }
 
     // Loads stations and connections from a JSON file
@@ -59,7 +90,7 @@ public class Grafo {
             Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(new File(jsonFile), Map.class);
             double x = 0.0;
             double y = 0.0;
-            double yIncrement = 50.0; // Increase the increment to make nodes more spacious
+            double yIncrement = 100.0;
             for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
                 List<Map<String, List<Object>>> lines = entry.getValue();
                 for (Map<String, List<Object>> line : lines) {
@@ -81,7 +112,7 @@ public class Grafo {
                             } else {
                                 continue;
                             }
-                            x = i * 30.0; // Increase spacing between nodes
+                            x = i * 30.0;
                             addStation(stationName, x, y);
                             if (previousStation != null) {
                                 addConnection(previousStation, stationName);
@@ -100,7 +131,6 @@ public class Grafo {
     public static void main(String[] args) {
         Grafo grafo = new Grafo();
         grafo.loadFromJSON("Caracas.json");
-        grafo.loadFromJSON("Bogota.json");
         grafo.display();
     }
 }
