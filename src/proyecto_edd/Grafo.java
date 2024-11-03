@@ -58,7 +58,6 @@ public class Grafo {
 
         graph.setAttribute("ui.stylesheet", styleSheet);
         Viewer viewer = graph.display();
-        viewer.disableAutoLayout();
 
         // Adjust node positions for better layout
         double xIncrement = 100.0;
@@ -109,6 +108,16 @@ public class Grafo {
                                 stationName = fromStation + ":" + toStation;
                                 combinedStationsMap.put(fromStation, stationName);
                                 combinedStationsMap.put(toStation, stationName);
+                                // Add both stations individually as well
+                                addStation(fromStation, x, y);
+                                addStation(toStation, x, y);
+                                // Connect the combined station to its respective line
+                                if (previousStation != null) {
+                                    addConnection(previousStation, fromStation);
+                                    addConnection(previousStation, toStation);
+                                }
+                                previousStation = fromStation;
+                                continue;
                             } else {
                                 continue;
                             }
@@ -123,8 +132,20 @@ public class Grafo {
                     }
                 }
             }
+            createEdgesBetweenMatchingStations();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Create edges between matching stations from combinedStationsMap
+    private void createEdgesBetweenMatchingStations() {
+        for (String station1 : combinedStationsMap.keySet()) {
+            for (String station2 : combinedStationsMap.keySet()) {
+                if (!station1.equals(station2) && combinedStationsMap.get(station1).equals(combinedStationsMap.get(station2))) {
+                    addConnection(station1, station2);
+                }
+            }
         }
     }
 
