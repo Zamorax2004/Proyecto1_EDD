@@ -15,7 +15,7 @@ import javax.swing.DefaultListModel;
  *
  * @author simon
  */
-//Ventana principal donde estan todas las funciones del programa (exceptuando agregar linea  y revisar cobertura total)
+//Ventana principal donde estan todas las funciones del programa
 public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
@@ -36,6 +36,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.grafo = new Grafo();
         initComponents();
         textField2.setEditable(false);
+        vOnly.setEditable(false);
         loadStations();
     }
 
@@ -60,6 +61,10 @@ public class VentanaM extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         searchBFS = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jToggleButton2 = new javax.swing.JToggleButton();
+        jToggleButton3 = new javax.swing.JToggleButton();
+        vOnly = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -90,7 +95,7 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(colocarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
-        searchDFS.setText("Ver cobertura sucursal (Busqueda a profundidad)");
+        searchDFS.setText("Ver cobertura sucursal (Busqueda a profundidad)*");
         searchDFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchDFSActionPerformed(evt);
@@ -98,13 +103,13 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
-        displayGrafo.setText("Mostrar Grafo");
+        displayGrafo.setText("Mostrar Grafo*");
         displayGrafo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayGrafoActionPerformed(evt);
             }
         });
-        jPanel1.add(displayGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
+        jPanel1.add(displayGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, -1, -1));
 
         tField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,13 +134,35 @@ public class VentanaM extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 210, 210));
 
-        searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)");
+        searchBFS.setText("Ver cobertura sucursal (Busqueda en Amplitud)*");
         searchBFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchBFSActionPerformed(evt);
             }
         });
         jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
+        jToggleButton1.setText("Guardar Archivo*");
+        jPanel1.add(jToggleButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, -1, -1));
+
+        jToggleButton2.setText("Agregar Linea*");
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jToggleButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+
+        jToggleButton3.setText("Revisar Cobertura total*");
+        jPanel1.add(jToggleButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+
+        vOnly.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        vOnly.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vOnlyActionPerformed(evt);
+            }
+        });
+        jPanel1.add(vOnly, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 250, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -153,27 +180,24 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_tFieldActionPerformed
     //Boton para confirmar variable "t"
     private void setTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTActionPerformed
-         try {
-        int t;
-        if (tField.getText().isEmpty()) {
-            if (sucursal != null) {
+        try {
+            int t;
+            if (tField.getText().isEmpty()) {
                 t = sucursal.getT();
+                vOnly.setText("t: " + String.valueOf(t));
                 System.out.println("Variable t predeterminada: " + t);
-            } else {
-                System.out.println("La sucursal no esta seleccionada");
+            }else {
+                t = Integer.parseInt(tField.getText());
+                if (sucursal != null){
+                    sucursal.setT(t);
+                    vOnly.setText("t: " + t);
+                }else{
+                    vOnly.setText("La sucursal no esta seleccionada.");
+                }
             }
-        } else {
-            t = Integer.parseInt(tField.getText());
-            if (sucursal != null) {
-                sucursal.setT(t);
-                System.out.println("t: " + t);
-            } else {
-                System.out.println("La sucursal no esta seleccionada");
-            }
+        }catch (NumberFormatException e){
+            vOnly.setText("Ingrese un numero entero.");
         }
-    } catch (NumberFormatException e) {
-        System.out.println("Error. Ingrese un numero entero.");
-    }
     }//GEN-LAST:event_setTActionPerformed
     //Boton para mostrar sucursales y acciones relacionadas
     private void textField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField2ActionPerformed
@@ -188,16 +212,16 @@ public class VentanaM extends javax.swing.JFrame {
                 dfsClass.removeStation(station); 
                 bfsClass.removeStation(station); 
                 grafo.removeStation(station); 
-                textField2.setText(station + " removed.");
+                vOnly.setText("Parada: " + station + " removida.");
             } else {
                 sucursal.addStation(station);
                 dfsClass.addStation(station); 
                 bfsClass.addStation(station); 
                 grafo.addStation(station); 
-                textField2.setText(station + " added.");
+                vOnly.setText("Parada: " + station + " añadida.");
             }
         } else {
-            textField2.setText("No se ha seleccionado una parada");
+            vOnly.setText("No se ha seleccionado una parada");
         }
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
@@ -213,9 +237,9 @@ public class VentanaM extends javax.swing.JFrame {
                 dfsClass.addEdge(connection[0], connection[1]);
             }
             int reachableStations = dfsClass.dfs(limit);
-            textField2.setText("Paradas alcanzables: " + reachableStations);
+            vOnly.setText("Paradas alcanzables: " + reachableStations);
         } else {
-            textField2.setText("No se ha colocado la sucursal.");
+            vOnly.setText("No se ha colocado la sucursal.");
         }
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
@@ -246,14 +270,22 @@ public class VentanaM extends javax.swing.JFrame {
             }
             try{
                 int reachableStations = bfsClass.bfs(limit);
-                textField2.setText("Paradas alcanzables: " + reachableStations);
+                vOnly.setText("Paradas alcanzables: " + reachableStations);
             }catch (IndexOutOfBoundsException e){
-                textField2.setText("Excedio el limite");
+                vOnly.setText("Excedio el limite");
             }
         }else{
-            textField2.setText("No se ha colocado una sucursal");
+            vOnly.setText("No se ha colocado una sucursal");
         }
     }//GEN-LAST:event_searchBFSActionPerformed
+
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
+
+    private void vOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vOnlyActionPerformed
+        
+    }//GEN-LAST:event_vOnlyActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
         if (newJsonFilePath != null) {
@@ -331,10 +363,14 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JButton searchBFS;
     private javax.swing.JButton searchDFS;
     private javax.swing.JButton setT;
     private javax.swing.JTextField tField;
     private javax.swing.JTextField textField2;
+    private javax.swing.JTextField vOnly;
     // End of variables declaration//GEN-END:variables
 }

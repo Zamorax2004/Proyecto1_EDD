@@ -36,9 +36,7 @@ public class Grafo {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
-        for (Edge edge : graph.getEachEdge()) {
-            edge.setAttribute("ui.label", edge.getId());
-        }
+        
         graph.setAttribute("ui.stylesheet", "edge { text-size: 14; fill-color: black; }");
         graph.display();
     }
