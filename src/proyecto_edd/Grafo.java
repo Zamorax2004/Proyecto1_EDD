@@ -47,7 +47,7 @@ public class Grafo {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
-        graph.setAttribute("ui.stylesheet", "graph { padding: 50px; } node { size: 20px; text-size: 14; } edge { text-size: 14; fill-color: black; }");
+        graph.setAttribute("ui.stylesheet", "graph { padding: 50px; } node { size: 20px; text-size: 14; text-alignment: at-right; } edge { text-size: 14; fill-color: black; }");
         Viewer viewer = graph.display();
         viewer.disableAutoLayout();
     }
@@ -59,7 +59,7 @@ public class Grafo {
             Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(new File(jsonFile), Map.class);
             double x = 0.0;
             double y = 0.0;
-            double yIncrement = 10.0;
+            double yIncrement = 50.0; // Increase the increment to make nodes more spacious
             for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
                 List<Map<String, List<Object>>> lines = entry.getValue();
                 for (Map<String, List<Object>> line : lines) {
@@ -81,7 +81,7 @@ public class Grafo {
                             } else {
                                 continue;
                             }
-                            x = i * 10.0;
+                            x = i * 30.0; // Increase spacing between nodes
                             addStation(stationName, x, y);
                             if (previousStation != null) {
                                 addConnection(previousStation, stationName);
