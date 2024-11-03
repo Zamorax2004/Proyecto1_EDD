@@ -19,8 +19,6 @@ import javax.swing.DefaultListModel;
 public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
-    private DFSClass dfsClass;
-    private BFSClass bfsClass;
     private Lista sucursales = new Lista();
     private Grafo grafo;
 
@@ -31,8 +29,6 @@ public class VentanaM extends javax.swing.JFrame {
         this.newJsonFilePath = newJsonFilePath;
         this.sucursal = new Sucursal(null);
         this.sucursal.setT(t);
-        this.dfsClass = new DFSClass(sucursal, 100);
-        this.bfsClass = new BFSClass(sucursal, 100);
         this.grafo = new Grafo();
         initComponents();
         textField2.setEditable(false);
@@ -208,15 +204,11 @@ public class VentanaM extends javax.swing.JFrame {
         String station = jList1.getSelectedValue();
         if (station != null) {
             if (sucursal.getStations().contains(station)) {
-                sucursal.removeStation(station);
-                dfsClass.removeStation(station); 
-                bfsClass.removeStation(station); 
+                sucursal.removeStation(station); 
                 grafo.removeStation(station); 
                 vOnly.setText("Parada: " + station + " removida.");
             } else {
                 sucursal.addStation(station);
-                dfsClass.addStation(station); 
-                bfsClass.addStation(station); 
                 grafo.addStation(station); 
                 vOnly.setText("Parada: " + station + " añadida.");
             }
@@ -226,57 +218,15 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
-        if (sucursal != null) {
-            int limit = Integer.parseInt(tField.getText());
-            dfsClass = new DFSClass(sucursal, 100);
-            for (int i = 0; i < sucursal.getStations().size(); i++) {
-                dfsClass.addStation(sucursal.getStations().get(i));
-            }
-            for (int i = 0; i < sucursal.getConnections().size(); i++) {
-                String[] connection = (String[]) sucursal.getConnections().get(i);
-                dfsClass.addEdge(connection[0], connection[1]);
-            }
-            int reachableStations = dfsClass.dfs(limit);
-            vOnly.setText("Paradas alcanzables: " + reachableStations);
-        } else {
-            vOnly.setText("No se ha colocado la sucursal.");
-        }
+            
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
-        grafo = new Grafo();
-        Lista stations = sucursal.getStations();
-        Lista connections = sucursal.getConnections();
-        for (int i = 0; i < stations.size(); i++) {
-            grafo.addStation(stations.get(i).toString());
-        }
-        for (int i = 0; i < connections.size(); i++) {
-            String[] connection = (String[]) connections.get(i);
-            grafo.addConnection(connection[0], connection[1]);
-        }
-        grafo.display();
+      
     }//GEN-LAST:event_displayGrafoActionPerformed
     //Boton de Busqueda en Amplitud
     private void searchBFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBFSActionPerformed
-        if (sucursal != null) {
-            int limit = Integer.parseInt(tField.getText());
-            BFSClass bfsClass = new BFSClass(sucursal, 100); 
-            for (int i = 0; i < sucursal.getStations().size(); i++) {
-                bfsClass.addStation(sucursal.getStations().get(i));
-            }
-            for (int i = 0; i < sucursal.getConnections().size(); i++) {
-                String[] connection = (String[]) sucursal.getConnections().get(i);
-                bfsClass.addEdge(connection[0], connection[1]);
-            }
-            try{
-                int reachableStations = bfsClass.bfs(limit);
-                vOnly.setText("Paradas alcanzables: " + reachableStations);
-            }catch (IndexOutOfBoundsException e){
-                vOnly.setText("Excedio el limite");
-            }
-        }else{
-            vOnly.setText("No se ha colocado una sucursal");
-        }
+       
     }//GEN-LAST:event_searchBFSActionPerformed
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed

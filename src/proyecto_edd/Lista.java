@@ -1,88 +1,62 @@
 package proyecto_edd;
 
+//Esta clase representa un array dinamico de objetos 
 public class Lista {
-    private Nodo head;
-
-    // Constructor
+    private Object[] elements;
+    private int size;
+    //Constructor
     public Lista() {
-        head = null;
+        elements = new Object[10];
+        size = 0;
     }
-
-    // Metodo para añadir un objeto a la lista
-    public void add(String data) {
-        Nodo newNode = new Nodo(data);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Nodo temp = head;
-            while (temp.next != null) {
-                temp = temp.next;
-            }
-            temp.next = newNode;
+    //Metodo para añadir un objeto a la lista
+    public void add(Object element) {
+        if (size == elements.length) {
+            resize();
         }
-        System.out.println("Añadido: " + data);
+        elements[size++] = element;
+        System.out.println("Added element: " + element + ", current size: " + size);
     }
-
-    // Metodo para remover un objeto de la lista
-    public boolean remove(String data) {
-        if (head == null) return false;
-
-        if (head.data.equals(data)) {
-            head = head.next;
-            System.out.println("Removed element: " + data);
+    //Metodo para remover un objeto de la lista
+    public boolean remove(Object element) {
+    for (int i = 0; i < size; i++) {
+        if (elements[i].equals(element)) {
+            System.arraycopy(elements, i + 1, elements, i, size - i - 1);
+            elements[--size] = null; // Clear the last element
+            System.out.println("Removed element: " + element + ", current size: " + size);
             return true;
         }
-
-        Nodo temp = head;
-        while (temp.next != null && !temp.next.data.equals(data)) {
-            temp = temp.next;
-        }
-
-        if (temp.next != null) {
-            temp.next = temp.next.next;
-            System.out.println("Removed element: " + data);
-            return true;
-        }
-
-        System.out.println("Element not found: " + data);
-        return false;
     }
-
-    // Funcion que revisa si la lista contiene un elemento especifico
-    public boolean contains(String data) {
-        Nodo temp = head;
-        while (temp != null) {
-            if (temp.data.equals(data)) {
+    System.out.println("Element not found: " + element);
+    return false;
+    }
+    //Funcion que revisa si la lista contiene un elemento especifico
+    public boolean contains(Object element) {
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(element)) {
                 return true;
             }
-            temp = temp.next;
         }
         return false;
     }
-
-    // Retorna un elemento en una posicion especifica de la lista
-    public String get(int index) {
-        int count = 0;
-        Nodo temp = head;
-        while (temp != null) {
-            if (count == index) {
-                System.out.println("Accessed element at index: " + index + ", element: " + temp.data);
-                return temp.data;
-            }
-            count++;
-            temp = temp.next;
+    //Retorna un elemento en un posicion especifica de la lista
+    public Object get(int index) {
+        if (index >= size || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + count);
+        System.out.println("Accessed element at index: " + index + ", element: " + elements[index]);
+        return elements[index];
     }
-
-    // Retorna el numero de elementos en la lista
+    //Retorna el numero de elementos en la lista
     public int size() {
-        int count = 0;
-        Nodo temp = head;
-        while (temp != null) {
-            count++;
-            temp = temp.next;
-        }
-        return count;
+        return size;
+    }
+    //Duplica el tamaño del array
+    private void resize() {
+        System.out.println("Resizing array, current capacity: " + elements.length);
+        Object[] newElements = new Object[elements.length * 2];
+        System.arraycopy(elements, 0, newElements, 0, elements.length);
+        elements = newElements;
+        System.out.println("Resized array, new capacity: " + elements.length);
     }
 }
