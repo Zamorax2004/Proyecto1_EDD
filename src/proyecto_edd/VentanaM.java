@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -256,7 +257,7 @@ public class VentanaM extends javax.swing.JFrame {
                     Set<String> reachableStations = dfs.getReachableStations();
                     vOnly.setText("Estaciones alcanzables: " + reachableStations.stream().collect(Collectors.joining(", ")));
                 } else {
-                    vOnly.setText("Node para: " + stationId + " no encontrado.");
+                    vOnly.setText("Nodo para: " + stationId + " no encontrado.");
                 }
             } else {
                 vOnly.setText("Sucursal no valida.");
@@ -301,7 +302,7 @@ public class VentanaM extends javax.swing.JFrame {
                     System.out.println("Attr posicion Nodo no es de tipo Objeto[].");
                 }
             } else {
-                System.out.println("Node para estacion " + stationId + " no encontrado.");
+                System.out.println("Nodo para estacion " + stationId + " no encontrado.");
             }
         }
         grafo.display();
@@ -327,15 +328,15 @@ public class VentanaM extends javax.swing.JFrame {
                     BFS bfs = new BFS(maxIterations);
                     bfs.search(grafo, startNode);
                     Set<String> reachableStations = bfs.getReachableStations();
-                    vOnly.setText("Reachable stations: " + String.join(", ", reachableStations));
+                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStations));
                 } else {
-                    vOnly.setText("Node for station " + stationId + " not found.");
+                    vOnly.setText("Nodo para: " + stationId + " no encontrado.");
                 }
             } else {
-                vOnly.setText("Selected item is not a valid sucursal.");
+                vOnly.setText("Sucursal no valida.");
             }
         } else {
-            vOnly.setText("Please select a valid sucursal from the list.");
+            vOnly.setText("Seleccione una sucursal!");
         }
     }//GEN-LAST:event_searchBFSActionPerformed
 
@@ -348,7 +349,41 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void cTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cTotalActionPerformed
-        
+        if (sucursalList.isEmpty()) {
+            vOnly.setText("No hay sucursales seleccionadas.");
+            return;
+        }
+        Set<String> allNodes = new HashSet<>(grafo.getAdjacencyList().keySet());
+        Set<String> reachableNodes = new HashSet<>();
+        Set<String> markedNodes = new HashSet<>();
+        for (Sucursal sucursal : sucursalList) {
+            Object station = sucursal.getStation();
+            String[] stationParts = station.toString().split(": ");
+            String stationId = stationParts.length > 1 ? stationParts[1] : stationParts[0];
+            Node startNode = grafo.getGraph().getNode(stationId);
+            if (startNode != null) {
+                int maxIterations = sucursal.getT();
+                BFS bfs = new BFS(maxIterations);
+                bfs.search(grafo, startNode);
+                reachableNodes.addAll(bfs.getReachableStations());
+                DFS dfs = new DFS(maxIterations, grafo);
+                dfs.search(startNode);
+                reachableNodes.addAll(dfs.getReachableStations());
+            }
+        }
+        for (Node node : grafo.getGraph()) {
+            if ("marked".equals(node.getAttribute("ui.class"))) {
+                markedNodes.add(node.getId());
+            }
+        }
+        if (reachableNodes.containsAll(allNodes) || markedNodes.containsAll(allNodes)) {
+            vOnly.setText("Las sucursales cubren totalmente la ciudad.");
+        } else {
+            Set<String> missingNodes = new HashSet<>(allNodes);
+            missingNodes.removeAll(reachableNodes);
+            missingNodes.removeAll(markedNodes);
+            vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodes));
+        }
     }//GEN-LAST:event_cTotalActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
