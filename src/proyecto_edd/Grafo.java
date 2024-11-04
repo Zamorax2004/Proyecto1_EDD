@@ -148,4 +148,7 @@ public class Grafo {
             }
         }
     }
+    public Graph getGraph() {
+        return graph;
+    }
 }

@@ -4,10 +4,12 @@ package proyecto_edd;
 public class Sucursal {
     private int t;
     private Object sucursal;
+    private Object station;
     //Constructor
-    public Sucursal(Object station){
+    public Sucursal(Object sucursal, Object station){
         this.t = 0;
-        this.sucursal = station;
+        this.sucursal = sucursal;
+        this.station = station;
     }
     //Getter
     public int getT() {
@@ -25,4 +27,13 @@ public class Sucursal {
     public void setSucursal(Object sucursal) {
         this.sucursal = sucursal;
     }
+
+    public Object getStation() {
+        return station;
+    }
+
+    public void setStation(Object station) {
+        this.station = station;
+    }
+    
 }

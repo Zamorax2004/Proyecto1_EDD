@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
+import org.graphstream.graph.Node;
 
 
 /**
@@ -154,13 +155,12 @@ public class VentanaM extends javax.swing.JFrame {
         jToggleButton3.setText("Revisar Cobertura total*");
         jPanel1.add(jToggleButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
-        vOnly.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         vOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vOnlyActionPerformed(evt);
             }
         });
-        jPanel1.add(vOnly, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 250, 40));
+        jPanel1.add(vOnly, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 320, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
@@ -203,7 +203,7 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_textField2ActionPerformed
     //Boton para confirmar sucursal seleccionada y añadirla a una lista o removerla
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-        
+      
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
