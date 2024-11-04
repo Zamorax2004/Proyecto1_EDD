@@ -3,15 +3,14 @@ package proyecto_edd;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 import java.io.*;
-import java.util.*;
 import com.fasterxml.jackson.databind.*;
 import org.graphstream.ui.view.Viewer;
 
 public class Grafo {
     private Graph graph;
-    private Map<String, String> combinedStationsMap = new HashMap<>();
-    private Map<String, double[]> nodePositions = new HashMap<>();
-    private Map<String, List<String>> adjacencyList = new HashMap<>();
+    private CustomMap<String, String> combinedStationsMap = new CustomMap<>();
+    private CustomMap<String, double[]> nodePositions = new CustomMap<>();
+    private CustomMap<String, CustomList<String>> adjacencyList = new CustomMap<>();
 
     // Constructor
     public Grafo() {
@@ -26,13 +25,13 @@ public class Grafo {
             node.setAttribute("ui.label", station);
             node.setAttribute("xyz", x, y, 0);
             nodePositions.put(station, new double[]{x, y});
-            adjacencyList.put(station, new ArrayList<>());
+            adjacencyList.put(station, new CustomList<>());
         }
     }
 
     // Adds a connection or edge
     public void addConnection(String station1, String station2) {
-        String edgeId = station1 + "-" + station2 + "_" + UUID.randomUUID();
+        String edgeId = station1 + "-" + station2 + "_" + CustomUUIDGenerator.generateUUID();
         graph.addEdge(edgeId, station1, station2);
         adjacencyList.get(station1).add(station2);
         adjacencyList.get(station2).add(station1);
@@ -44,7 +43,7 @@ public class Grafo {
         if (node != null) {
             graph.removeNode(station);
             adjacencyList.remove(station);
-            for (List<String> neighbors : adjacencyList.values()) {
+            for (CustomList<String> neighbors : adjacencyList.values()) {
                 neighbors.remove(station);
             }
         }
@@ -94,23 +93,23 @@ public class Grafo {
     public void loadFromJSON(String jsonFile) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(new File(jsonFile), Map.class);
+            CustomMap<String, CustomList<CustomMap<String, CustomList<Object>>>> data = mapper.readValue(new File(jsonFile), CustomMap.class);
             double x = 0.0;
             double y = 0.0;
             double yIncrement = 100.0;
-            for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
-                List<Map<String, List<Object>>> lines = entry.getValue();
-                for (Map<String, List<Object>> line : lines) {
-                    for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
-                        List<Object> stations = lineEntry.getValue();
+            for (CustomMap.Entry<String, CustomList<CustomMap<String, CustomList<Object>>>> entry : data.entrySet()) {
+                CustomList<CustomMap<String, CustomList<Object>>> lines = entry.getValue();
+                for (CustomMap<String, CustomList<Object>> line : lines) {
+                    for (CustomMap.Entry<String, CustomList<Object>> lineEntry : line.entrySet()) {
+                        CustomList<Object> stations = lineEntry.getValue();
                         String previousStation = null;
                         for (int i = 0; i < stations.size(); i++) {
                             Object station = stations.get(i);
                             String stationName;
                             if (station instanceof String) {
                                 stationName = (String) station;
-                            } else if (station instanceof Map) {
-                                Map<String, String> transfer = (Map<String, String>) station;
+                            } else if (station instanceof CustomMap) {
+                                CustomMap<String, String> transfer = (CustomMap<String, String>) station;
                                 String fromStation = transfer.keySet().iterator().next();
                                 String toStation = transfer.get(fromStation);
                                 stationName = fromStation + ":" + toStation;
@@ -161,7 +160,7 @@ public class Grafo {
         return graph;
     }
 
-    public Map<String, List<String>> getAdjacencyList() {
+    public CustomMap<String, CustomList<String>> getAdjacencyList() {
         return adjacencyList;
     }
 }

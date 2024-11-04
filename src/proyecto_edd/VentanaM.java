@@ -7,12 +7,6 @@ package proyecto_edd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import org.graphstream.graph.Node;
 
@@ -26,7 +20,7 @@ public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
     private Grafo grafo;
-    private List<Sucursal> sucursalList;
+    private CustomList<Sucursal> sucursalList;
     private int sucursalCounter;
 
     /**
@@ -37,7 +31,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.sucursal = new Sucursal(0, null);
         this.sucursal.setT(t);
         this.grafo = new Grafo();
-        this.sucursalList = new ArrayList<>();
+        this.sucursalList = new CustomList<>();
         this.sucursalCounter = 1;
         initComponents();
         textField2.setEditable(false);
@@ -254,7 +248,7 @@ public class VentanaM extends javax.swing.JFrame {
                     int maxIterations = sucursal.getT();
                     DFS dfs = new DFS(maxIterations, grafo);
                     dfs.search(startNode);
-                    Set<String> reachableStations = dfs.getReachableStations();
+                    CustomSet<String> reachableStations = dfs.getReachableStations();
                     vOnly.setText("Estaciones alcanzables: " + reachableStations.stream().collect(Collectors.joining(", ")));
                 } else {
                     vOnly.setText("Nodo para: " + stationId + " no encontrado.");
@@ -327,7 +321,7 @@ public class VentanaM extends javax.swing.JFrame {
                     int maxIterations = sucursal.getT();
                     BFS bfs = new BFS(maxIterations);
                     bfs.search(grafo, startNode);
-                    Set<String> reachableStations = bfs.getReachableStations();
+                    CustomSet<String> reachableStations = bfs.getReachableStations();
                     vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStations));
                 } else {
                     vOnly.setText("Nodo para: " + stationId + " no encontrado.");
@@ -353,9 +347,9 @@ public class VentanaM extends javax.swing.JFrame {
             vOnly.setText("No hay sucursales seleccionadas.");
             return;
         }
-        Set<String> allNodes = new HashSet<>(grafo.getAdjacencyList().keySet());
-        Set<String> reachableNodes = new HashSet<>();
-        Set<String> markedNodes = new HashSet<>();
+        CustomSet<String> allNodes = new CustomSet<>(grafo.getAdjacencyList().keySet());
+        CustomSet<String> reachableNodes = new CustomSet<>();
+        CustomSet<String> markedNodes = new CustomSet<>();
         for (Sucursal sucursal : sucursalList) {
             Object station = sucursal.getStation();
             String[] stationParts = station.toString().split(": ");
@@ -379,7 +373,7 @@ public class VentanaM extends javax.swing.JFrame {
         if (reachableNodes.containsAll(allNodes) || markedNodes.containsAll(allNodes)) {
             vOnly.setText("Las sucursales cubren totalmente la ciudad.");
         } else {
-            Set<String> missingNodes = new HashSet<>(allNodes);
+            CustomSet<String> missingNodes = new CustomHashSet<>(allNodes);
             missingNodes.removeAll(reachableNodes);
             missingNodes.removeAll(markedNodes);
             vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodes));
@@ -391,19 +385,19 @@ public class VentanaM extends javax.swing.JFrame {
             try {
                 File jsonFile = new File(newJsonFilePath);
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(jsonFile, Map.class);
+                CustomMap<String, CustomList<CustomMap<String, CustomList<Object>>>> data = mapper.readValue(jsonFile, CustomMap.class);
                 DefaultListModel<String> listModel = new DefaultListModel<>();
-                for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
-                    List<Map<String, List<Object>>> lines = entry.getValue();
+                for (CustomMap.Entry<String, CustomList<CustomMap<String, CustomList<Object>>>> entry : data.entrySet()) {
+                    CustomList<CustomMap<String, CustomList<Object>>> lines = entry.getValue();
                     int lineaCounter = 1;
-                    for (Map<String, List<Object>> line : lines) {
+                    for (CustomMap<String, CustomList<Object>> line : lines) {
                         String lineaName = "Linea " + lineaCounter;
-                        for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
-                            List<Object> stations = lineEntry.getValue();
+                        for (CustomMap.Entry<String, CustomList<Object>> lineEntry : line.entrySet()) {
+                            CustomList<Object> stations = lineEntry.getValue();
                             for (Object station : stations) {
-                                if (station instanceof Map) {
-                                    Map<String, String> transfer = (Map<String, String>) station;
-                                    for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
+                                if (station instanceof CustomMap) {
+                                    CustomMap<String, String> transfer = (CustomMap<String, String>) station;
+                                    for (CustomMap.Entry<String, String> transferEntry : transfer.entrySet()) {
                                         listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
                                         System.out.println("Estacion de transferencia añadida: " + transferEntry.getKey() + " - " + transferEntry.getValue());
                                     }

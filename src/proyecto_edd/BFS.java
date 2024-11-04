@@ -1,42 +1,37 @@
 package proyecto_edd;
 
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
 
 public class BFS {
     private int maxIterations;
-    private Set<String> reachableStations;
+    private CustomSet<String> reachableStations;
 
     public BFS(int maxIterations) {
         this.maxIterations = maxIterations;
-        this.reachableStations = new HashSet<>();
+        this.reachableStations = new CustomSet<>();
     }
 
-    public Set<String> getReachableStations() {
+    public CustomSet<String> getReachableStations() {
         return reachableStations;
     }
 
     public void search(Grafo grafo, Node startNode) {
-        Set<String> visited = new HashSet<>();
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(startNode);
+        CustomSet<String> visited = new CustomSet<>();
+        CustomQueue<Node> queue = new CustomQueue<>();
+        queue.enqueue(startNode);
         visited.add(startNode.getId());
 
         int currentIteration = 0;
 
         while (!queue.isEmpty() && currentIteration <= maxIterations) {
-            Node node = queue.poll();
+            Node node = queue.dequeue();
             reachableStations.add(node.getId());
             node.setAttribute("ui.class", "marked");
 
             for (String neighborId : grafo.getAdjacencyList().get(node.getId())) {
                 Node neighborNode = grafo.getGraph().getNode(neighborId);
                 if (!visited.contains(neighborNode.getId())) {
-                    queue.add(neighborNode);
+                    queue.enqueue(neighborNode);
                     visited.add(neighborNode.getId());
                 }
             }

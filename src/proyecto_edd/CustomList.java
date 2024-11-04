@@ -1,6 +1,6 @@
 package proyecto_edd;
 
-public class CustomList<E> {
+public class CustomList<E> implements Iterable<E> {
     private Node<E> head;
     private int size;
 
@@ -67,5 +67,30 @@ public class CustomList<E> {
             current = current.next;
         }
         return false;
+    }
+
+    @Override
+    public CustomIterator<E> iterator() {
+        return new CustomIterator<>(head);
+    }
+
+    private static class CustomIterator<E> implements java.util.Iterator<E> {
+        private Node<E> current;
+
+        CustomIterator(Node<E> head) {
+            this.current = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public E next() {
+            E data = current.data;
+            current = current.next;
+            return data;
+        }
     }
 }
