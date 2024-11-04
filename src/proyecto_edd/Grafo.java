@@ -115,10 +115,8 @@ public class Grafo {
                                 stationName = fromStation + ":" + toStation;
                                 combinedStationsMap.put(fromStation, stationName);
                                 combinedStationsMap.put(toStation, stationName);
-                                // Add both stations individually as well
                                 addStation(fromStation, x, y);
                                 addStation(toStation, x, y);
-                                // Connect the combined station to its respective line
                                 if (previousStation != null) {
                                     addConnection(previousStation, fromStation);
                                     addConnection(previousStation, toStation);
@@ -144,7 +142,6 @@ public class Grafo {
             e.printStackTrace();
         }
     }
-
     // Create edges between matching stations from combinedStationsMap
     private void createEdgesBetweenMatchingStations() {
         for (String station1 : combinedStationsMap.keySet()) {

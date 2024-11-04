@@ -4,6 +4,7 @@
  */
 package proyecto_edd;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -385,38 +386,13 @@ public class VentanaM extends javax.swing.JFrame {
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
         if (newJsonFilePath != null) {
-            try {
-                File jsonFile = new File(newJsonFilePath);
-                ObjectMapper mapper = new ObjectMapper();
-                CustomMap<String, CustomList<CustomMap<String, CustomList<Object>>>> data = mapper.readValue(jsonFile, CustomMap.class);
-                DefaultListModel<String> listModel = new DefaultListModel<>();
-                for (CustomMap.Entry<String, CustomList<CustomMap<String, CustomList<Object>>>> entry : data.entrySet()) {
-                    CustomList<CustomMap<String, CustomList<Object>>> lines = entry.getValue();
-                    int lineaCounter = 1;
-                    for (CustomMap<String, CustomList<Object>> line : lines) {
-                        String lineaName = "Linea " + lineaCounter;
-                        for (CustomMap.Entry<String, CustomList<Object>> lineEntry : line.entrySet()) {
-                            CustomList<Object> stations = lineEntry.getValue();
-                            for (Object station : stations) {
-                                if (station instanceof CustomMap) {
-                                    CustomMap<String, String> transfer = (CustomMap<String, String>) station;
-                                    for (CustomMap.Entry<String, String> transferEntry : transfer.entrySet()) {
-                                        listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
-                                        System.out.println("Estacion de transferencia añadida: " + transferEntry.getKey() + " - " + transferEntry.getValue());
-                                    }
-                                } else {
-                                    listModel.addElement(lineaName + ": " + station.toString());
-                                    System.out.println("Estacion añadida: " + station.toString());
-                                }
-                            }
-                        }
-                        lineaCounter++;
-                    }
-                }
-                jList1.setModel(listModel);
-            } catch (IOException e) {
-                e.printStackTrace();
+            grafo.loadFromJSON(newJsonFilePath); // Utilize the Grafo's method to load the JSON file
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+            for (String station : grafo.getAdjacencyList().keySet()) {
+                listModel.addElement(station);
+                System.out.println("Estacion añadida: " + station);
             }
+            jList1.setModel(listModel);
         }
     }
     /**

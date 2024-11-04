@@ -1,11 +1,13 @@
 package proyecto_edd;
 
-public class CustomMap<K, V>{
-    private CustomList<Entry<K, V>> entries;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-    public CustomMap() {
-        entries = new CustomList<>();
-    }
+@JsonDeserialize(using = CustomMapDeserializer.class)
+public class CustomMap<K, V> {
+    private CustomList<Entry<K, V>> entries = new CustomList<>();
 
     public static class Entry<K, V> {
         K key;
@@ -29,7 +31,13 @@ public class CustomMap<K, V>{
         }
     }
 
-    public void put(K key, V value) {
+    @JsonValue
+    public CustomList<Entry<K, V>> getEntries() {
+        return entries;
+    }
+
+    @JsonAnySetter
+    public void putEntry(K key, V value) {
         for (Entry<K, V> entry : entries) {
             if (entry.matchesKey(key)) {
                 entry.value = value;
@@ -39,15 +47,12 @@ public class CustomMap<K, V>{
         entries.add(new Entry<>(key, value));
     }
 
-    public V get(K key) {
-        for (Entry<K, V> entry : entries) {
-            if (entry.matchesKey(key)) {
-                return entry.value;
-            }
-        }
-        return null;
+    @JsonIgnore
+    public int size() {
+        return entries.size();
     }
 
+    @JsonIgnore
     public boolean containsKey(K key) {
         for (Entry<K, V> entry : entries) {
             if (entry.matchesKey(key)) {
@@ -57,35 +62,17 @@ public class CustomMap<K, V>{
         return false;
     }
 
-    public int size() {
-        return entries.size();
-    }
-
-    public CustomList<K> keySet() {
-        CustomList<K> keys = new CustomList<>();
+    @JsonIgnore
+    public V get(K key) {
         for (Entry<K, V> entry : entries) {
-            keys.add(entry.key);
+            if (entry.matchesKey(key)) {
+                return entry.value;
+            }
         }
-        return keys;
+        return null;
     }
 
-    public CustomList<Entry<K, V>> entrySet() {
-        CustomList<Entry<K, V>> entrySet = new CustomList<>();
-        for (Entry<K, V> entry : entries) {
-            entrySet.add(entry);
-        }
-        return entrySet;
-    }
-
-    public CustomList<V> values() {
-        CustomList<V> values = new CustomList<>();
-        for (Entry<K, V> entry : entries) {
-            values.add(entry.getValue());
-        }
-        return values;
-    }
-
-
+    @JsonIgnore
     public boolean remove(K key) {
         for (Entry<K, V> entry : entries) {
             if (entry.matchesKey(key)) {
@@ -94,5 +81,28 @@ public class CustomMap<K, V>{
             }
         }
         return false;
+    }
+
+    @JsonIgnore
+    public CustomList<K> keySet() {
+        CustomList<K> keys = new CustomList<>();
+        for (Entry<K, V> entry : entries) {
+            keys.add(entry.key);
+        }
+        return keys;
+    }
+
+    @JsonIgnore
+    public CustomList<Entry<K, V>> entrySet() {
+        return entries;
+    }
+
+    @JsonIgnore
+    public CustomList<V> values() {
+        CustomList<V> values = new CustomList<>();
+        for (Entry<K, V> entry : entries) {
+            values.add(entry.getValue());
+        }
+        return values;
     }
 }
