@@ -11,6 +11,7 @@ public class Grafo {
     private Graph graph;
     private Map<String, String> combinedStationsMap = new HashMap<>();
     private Map<String, double[]> nodePositions = new HashMap<>();
+    private Map<String, List<String>> adjacencyList = new HashMap<>();
 
     // Constructor
     public Grafo() {
@@ -18,36 +19,44 @@ public class Grafo {
         graph = new MultiGraph("Grafo");
     }
 
-    // Añade una estacion o nodo
+    // Adds a station or node
     public void addStation(String station, double x, double y) {
         if (graph.getNode(station) == null) {
             Node node = graph.addNode(station);
             node.setAttribute("ui.label", station);
             node.setAttribute("xyz", x, y, 0);
             nodePositions.put(station, new double[]{x, y});
+            adjacencyList.put(station, new ArrayList<>());
         }
     }
 
-    // Añade una conexion o edge
+    // Adds a connection or edge
     public void addConnection(String station1, String station2) {
         String edgeId = station1 + "-" + station2 + "_" + UUID.randomUUID();
         graph.addEdge(edgeId, station1, station2);
+        adjacencyList.get(station1).add(station2);
+        adjacencyList.get(station2).add(station1);
     }
 
-    // Quita una estacion o Nodo
+    // Removes a station or node
     public void removeStation(String station) {
         Node node = graph.getNode(station);
         if (node != null) {
             graph.removeNode(station);
+            adjacencyList.remove(station);
+            for (List<String> neighbors : adjacencyList.values()) {
+                neighbors.remove(station);
+            }
         }
     }
 
-    // Muestra el grafo
+    // Displays the graph
     public void display() {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
 
+        // Set node styles like a subway map
         String styleSheet =
                 "graph { padding: 50px; }" +
                 "node { size: 10px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
@@ -58,6 +67,7 @@ public class Grafo {
         graph.setAttribute("ui.stylesheet", styleSheet);
         Viewer viewer = graph.display();
 
+        // Adjust node positions for better layout
         double xIncrement = 100.0;
         double yIncrement = 100.0;
         double x = 0.0;
@@ -66,11 +76,13 @@ public class Grafo {
         for (Node node : graph) {
             double[] pos = nodePositions.get(node.getId());
             if (pos != null) {
+                // Adjust positions programmatically for subway station layout
                 node.setAttribute("xyz", pos[0], pos[1], 0);
             } else {
+                // New layout logic
                 node.setAttribute("xyz", x, y, 0);
                 x += xIncrement;
-                if (x > 500) {
+                if (x > 500) { // Reset x and increment y to create a grid-like layout
                     x = 0;
                     y += yIncrement;
                 }
@@ -104,8 +116,10 @@ public class Grafo {
                                 stationName = fromStation + ":" + toStation;
                                 combinedStationsMap.put(fromStation, stationName);
                                 combinedStationsMap.put(toStation, stationName);
+                                // Add both stations individually as well
                                 addStation(fromStation, x, y);
                                 addStation(toStation, x, y);
+                                // Connect the combined station to its respective line
                                 if (previousStation != null) {
                                     addConnection(previousStation, fromStation);
                                     addConnection(previousStation, toStation);
@@ -132,7 +146,7 @@ public class Grafo {
         }
     }
 
-    // Crea edges entre matchingStations dentro de combinedStationsMap
+    // Create edges between matching stations from combinedStationsMap
     private void createEdgesBetweenMatchingStations() {
         for (String station1 : combinedStationsMap.keySet()) {
             for (String station2 : combinedStationsMap.keySet()) {
@@ -142,7 +156,12 @@ public class Grafo {
             }
         }
     }
+    
     public Graph getGraph() {
         return graph;
+    }
+
+    public Map<String, List<String>> getAdjacencyList() {
+        return adjacencyList;
     }
 }

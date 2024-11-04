@@ -2,17 +2,18 @@ package proyecto_edd;
 
 import org.graphstream.graph.Node;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DFS {
     private int maxIterations;
     private Set<String> reachableStations;
+    private Grafo grafo;
 
-    public DFS(int maxIterations) {
+    public DFS(int maxIterations, Grafo grafo) {
         this.maxIterations = maxIterations;
         this.reachableStations = new HashSet<>();
+        this.grafo = grafo;
     }
 
     public Set<String> getReachableStations() {
@@ -32,11 +33,14 @@ public class DFS {
         reachableStations.add(node.getId());
         node.setAttribute("ui.class", "marked");
 
-        Stream<Node> neighbors = node.neighborNodes();
-        neighbors.forEach(neighbor -> {
-            if (!visited.contains(neighbor.getId())) {
-                dfs(neighbor, visited, currentIteration + 1);
+        List<String> neighbors = grafo.getAdjacencyList().get(node.getId());
+        if (neighbors != null) {
+            for (String neighborId : neighbors) {
+                Node neighborNode = grafo.getGraph().getNode(neighborId);
+                if (!visited.contains(neighborId)) {
+                    dfs(neighborNode, visited, currentIteration + 1);
+                }
             }
-        });
+        }
     }
 }
