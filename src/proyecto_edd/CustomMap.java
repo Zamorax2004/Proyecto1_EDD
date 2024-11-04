@@ -15,7 +15,7 @@ public class CustomMap<K, V>{
             this.key = key;
             this.value = value;
         }
-        
+
         public K getKey() {
             return key;
         }
@@ -68,7 +68,7 @@ public class CustomMap<K, V>{
         }
         return keys;
     }
-    
+
     public CustomList<Entry<K, V>> entrySet() {
         CustomList<Entry<K, V>> entrySet = new CustomList<>();
         for (Entry<K, V> entry : entries) {
@@ -76,7 +76,7 @@ public class CustomMap<K, V>{
         }
         return entrySet;
     }
-    
+
     public CustomList<V> values() {
         CustomList<V> values = new CustomList<>();
         for (Entry<K, V> entry : entries) {
@@ -84,7 +84,8 @@ public class CustomMap<K, V>{
         }
         return values;
     }
-    
+
+
     public boolean remove(K key) {
         for (Entry<K, V> entry : entries) {
             if (entry.matchesKey(key)) {
