@@ -1,6 +1,6 @@
 package proyecto_edd;
 
-public class CustomMap<K, V> {
+public class CustomMap<K, V>{
     private CustomList<Entry<K, V>> entries;
 
     public CustomMap() {

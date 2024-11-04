@@ -3,8 +3,8 @@ package proyecto_edd;
 public class CustomIterator<E> {
     private CustomList.Node<E> current;
 
-    public CustomIterator(CustomList.Node<E> head) {
-        this.current = head;
+    public CustomIterator(CustomList<E> list) {
+        this.current = list.head;
     }
 
     public boolean hasNext() {
