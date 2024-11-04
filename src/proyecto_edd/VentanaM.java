@@ -249,7 +249,8 @@ public class VentanaM extends javax.swing.JFrame {
                     DFS dfs = new DFS(maxIterations, grafo);
                     dfs.search(startNode);
                     CustomSet<String> reachableStations = dfs.getReachableStations();
-                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStations));
+                    String[] reachableStationsArray = reachableStations.toArray();
+                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStationsArray));
                 } else {
                     vOnly.setText("Nodo para: " + stationId + " no encontrado.");
                 }
@@ -322,7 +323,8 @@ public class VentanaM extends javax.swing.JFrame {
                     BFS bfs = new BFS(maxIterations);
                     bfs.search(grafo, startNode);
                     CustomSet<String> reachableStations = bfs.getReachableStations();
-                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStations));
+                    String[] reachableStationsArray = reachableStations.toArray();
+                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStationsArray));
                 } else {
                     vOnly.setText("Nodo para: " + stationId + " no encontrado.");
                 }
@@ -376,7 +378,8 @@ public class VentanaM extends javax.swing.JFrame {
             CustomSet<String> missingNodes = new CustomHashSet<>(allNodes);
             missingNodes.removeAll(reachableNodes);
             missingNodes.removeAll(markedNodes);
-            vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodes));
+            String[] missingNodesArray = missingNodes.toArray();
+            vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodesArray));
         }
     }//GEN-LAST:event_cTotalActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList

@@ -1,6 +1,6 @@
 package proyecto_edd;
 
-public class CustomList<E> implements Iterable<E>{
+public class CustomList<E> implements Iterable<E> {
     public Node<E> head;
     private int size;
 
@@ -68,13 +68,13 @@ public class CustomList<E> implements Iterable<E>{
         }
         return false;
     }
-    
+
     @Override
     public CustomIterator<E> iterator() {
         return new CustomIterator<>(head);
     }
 
-    public static class CustomIterator<E> implements java.util.Iterator<E>{
+    public static class CustomIterator<E> implements java.util.Iterator<E> {
         private Node<E> current;
 
         CustomIterator(Node<E> head) {
@@ -93,7 +93,7 @@ public class CustomList<E> implements Iterable<E>{
             return data;
         }
     }
-    
+
     public E get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -104,7 +104,7 @@ public class CustomList<E> implements Iterable<E>{
         }
         return current.data;
     }
-    
+
     public boolean isEmpty() {
         return size == 0;
     }
