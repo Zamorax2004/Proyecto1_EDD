@@ -3,10 +3,10 @@ package proyecto_edd;
 //La clase sucursal representa una rama con un conjunto de estaciones y conexiones
 public class Sucursal {
     private int t;
-    private Object sucursal;
+    private int sucursal;
     private Object station;
     //Constructor
-    public Sucursal(Object sucursal, Object station){
+    public Sucursal(int sucursal, Object station){
         this.t = 0;
         this.sucursal = sucursal;
         this.station = station;
@@ -20,11 +20,11 @@ public class Sucursal {
         this.t = t;
     }
     //Getter
-    public Object getSucursal() {
+    public int getSucursal() {
         return sucursal;
     }
     //Setter
-    public void setSucursal(Object sucursal) {
+    public void setSucursal(int sucursal) {
         this.sucursal = sucursal;
     }
 

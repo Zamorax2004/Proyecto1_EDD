@@ -7,6 +7,7 @@ package proyecto_edd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
@@ -22,15 +23,19 @@ public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
     private Grafo grafo;
+    private List<Sucursal> sucursalList;
+    private int sucursalCounter;
 
     /**
      * Creates new form VentanaM
      */
     public VentanaM(String newJsonFilePath, int t) {
         this.newJsonFilePath = newJsonFilePath;
-        this.sucursal = new Sucursal(null, null);
+        this.sucursal = new Sucursal(0, null);
         this.sucursal.setT(t);
         this.grafo = new Grafo();
+        this.sucursalList = new ArrayList<>();
+        this.sucursalCounter = 1;
         initComponents();
         textField2.setEditable(false);
         vOnly.setEditable(false);
@@ -202,7 +207,28 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_textField2ActionPerformed
     //Boton para confirmar sucursal seleccionada y añadirla a una lista o removerla
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-      
+        Object selectedStation = jList1.getSelectedValue();
+        if (selectedStation != null) {
+            boolean alreadyExists = false;
+            for (Sucursal s : sucursalList) {
+                if (s.getStation().equals(selectedStation)) {
+                    alreadyExists = true;
+                    sucursalList.remove(s);
+                    textField2.setText("");
+                    vOnly.setText("Estación removida: " + selectedStation.toString());
+                    break;
+                }
+            }
+            if (!alreadyExists) {
+                Sucursal newSucursal = new Sucursal(sucursalCounter, selectedStation);
+                sucursalList.add(newSucursal);
+                sucursalCounter++;
+                textField2.setText(selectedStation.toString());
+                vOnly.setText("Estación añadida: " + selectedStation.toString());
+            }
+        } else {
+            vOnly.setText("Seleccione una estación de la lista.");
+        }
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
@@ -210,7 +236,46 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
-            grafo.display();
+        for (Sucursal sucursal : sucursalList) {
+            Object station = sucursal.getStation();
+            String[] stationParts = station.toString().split(": ");
+            String stationId = stationParts.length > 1 ? stationParts[1] : stationParts[0];
+            Node node = grafo.getGraph().getNode(stationId);
+            if (node != null) {
+            // Ensure the attribute is cast correctly
+                Object posObject = node.getAttribute("xyz");
+                if (posObject instanceof Object[]) {
+                    Object[] posArray = (Object[]) posObject;
+                    if (posArray.length == 3) {
+                        try {
+                            double x = Double.parseDouble(posArray[0].toString());
+                            double y = Double.parseDouble(posArray[1].toString());
+                            double z = Double.parseDouble(posArray[2].toString());
+                            String newNodeId = stationId + "_sucursal";
+                            if (grafo.getGraph().getNode(newNodeId) == null) {
+                                Node newNode = grafo.getGraph().addNode(newNodeId);
+                                newNode.setAttribute("ui.label", newNodeId);
+                                newNode.setAttribute("xyz", x + 0.1, y + 0.1, z + 0.1);
+                                newNode.setAttribute("ui.style", "fill-color: black;");
+                                System.out.println("Node " + newNodeId + " created at position: " + x + ", " + y + ", " + z);
+                            // Add edge between the station node and the new node
+                                String edgeId = stationId + "_to_" + newNodeId;
+                                grafo.getGraph().addEdge(edgeId, stationId, newNodeId);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Failed to parse node position attributes to double.");
+                        }
+                    } else {
+                        System.out.println("Node position attribute does not have exactly 3 elements.");
+                    }
+                } else {
+                    System.out.println("Node position attribute is not of type Object[].");
+                }
+            } else {
+                System.out.println("Node for station " + stationId + " not found.");
+            }
+        }
+        grafo.display();
     }//GEN-LAST:event_displayGrafoActionPerformed
     //Boton de Busqueda en Amplitud
     private void searchBFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBFSActionPerformed
@@ -226,41 +291,41 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_vOnlyActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
-    if (newJsonFilePath != null) {
-        try {
-            File jsonFile = new File(newJsonFilePath);
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(jsonFile, Map.class);
-            DefaultListModel<String> listModel = new DefaultListModel<>();
-
-            for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
-                List<Map<String, List<Object>>> lines = entry.getValue();
-                int lineaCounter = 1;
-                for (Map<String, List<Object>> line : lines) {
-                    String lineaName = "Linea " + lineaCounter;
-                    for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
-                        List<Object> stations = lineEntry.getValue();
-                        for (Object station : stations) {
-                            if (station instanceof Map) {
-                                Map<String, String> transfer = (Map<String, String>) station;
-                                for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
-                                    listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
+        if (newJsonFilePath != null) {
+            try {
+                File jsonFile = new File(newJsonFilePath);
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(jsonFile, Map.class);
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+                for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
+                    List<Map<String, List<Object>>> lines = entry.getValue();
+                    int lineaCounter = 1;
+                    for (Map<String, List<Object>> line : lines) {
+                        String lineaName = "Linea " + lineaCounter;
+                        for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
+                            List<Object> stations = lineEntry.getValue();
+                            for (Object station : stations) {
+                                if (station instanceof Map) {
+                                    Map<String, String> transfer = (Map<String, String>) station;
+                                    for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
+                                        listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
+                                        System.out.println("Added transfer station: " + transferEntry.getKey() + " - " + transferEntry.getValue());
+                                    }
+                                } else {
+                                    listModel.addElement(lineaName + ": " + station.toString());
+                                    System.out.println("Added station: " + station.toString());
                                 }
-                            } else {
-                                listModel.addElement(lineaName + ": " + station.toString());
                             }
                         }
+                        lineaCounter++;
                     }
-                    lineaCounter++;
                 }
+                jList1.setModel(listModel);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            jList1.setModel(listModel);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
-}
-    
     /**
      * @param args the command line arguments
      */
