@@ -1,36 +1,34 @@
 package proyecto_edd;
-
 import org.graphstream.graph.Node;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 public class DFS {
     private int maxIterations;
-    private CustomSet<String> reachableStations;
+    private Set<String> reachableStations;
     private Grafo grafo;
-
+    
     public DFS(int maxIterations, Grafo grafo) {
         this.maxIterations = maxIterations;
-        this.reachableStations = new CustomSet<>();
-        this.grafo = grafo;
+        this.reachableStations = new HashSet<>();
     }
-
-    public CustomSet<String> getReachableStations() {
+    public Set<String> getReachableStations() {
         return reachableStations;
     }
-
     public void search(Node startNode) {
-        CustomSet<String> visited = new CustomSet<>();
+        Set<String> visited = new HashSet<>();
         dfs(startNode, visited, 0);
     }
-
-    private void dfs(Node node, CustomSet<String> visited, int currentIteration) {
+    private void dfs(Node node, Set<String> visited, int currentIteration) {
         if (currentIteration > maxIterations) {
             return;
         }
         visited.add(node.getId());
         reachableStations.add(node.getId());
         node.setAttribute("ui.class", "marked");
-
-        CustomList<String> neighbors = grafo.getAdjacencyList().get(node.getId());
+        List<String> neighbors = grafo.getAdjacencyList().get(node.getId());
         if (neighbors != null) {
             for (String neighborId : neighbors) {
                 Node neighborNode = grafo.getGraph().getNode(neighborId);

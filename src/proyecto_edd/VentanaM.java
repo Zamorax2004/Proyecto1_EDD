@@ -4,10 +4,15 @@
  */
 package proyecto_edd;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import org.graphstream.graph.Node;
 
@@ -21,7 +26,7 @@ public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
     private Grafo grafo;
-    private CustomList<Sucursal> sucursalList;
+    private List<Sucursal> sucursalList;
     private int sucursalCounter;
 
     /**
@@ -32,7 +37,7 @@ public class VentanaM extends javax.swing.JFrame {
         this.sucursal = new Sucursal(0, null);
         this.sucursal.setT(t);
         this.grafo = new Grafo();
-        this.sucursalList = new CustomList<>();
+        this.sucursalList = new ArrayList<>();
         this.sucursalCounter = 1;
         initComponents();
         textField2.setEditable(false);
@@ -62,7 +67,6 @@ public class VentanaM extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         searchBFS = new javax.swing.JButton();
-        saveFile = new javax.swing.JToggleButton();
         cTotal = new javax.swing.JToggleButton();
         vOnly = new javax.swing.JTextField();
 
@@ -142,15 +146,7 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
-        saveFile.setText("Guardar Archivo*");
-        saveFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveFileActionPerformed(evt);
-            }
-        });
-        jPanel1.add(saveFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, -1, -1));
-
-        cTotal.setText("Revisar Cobertura total*");
+        cTotal.setText("Revisar Cobertura total");
         cTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cTotalActionPerformed(evt);
@@ -206,7 +202,7 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_textField2ActionPerformed
     //Boton para confirmar sucursal seleccionada y añadirla a una lista o removerla
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-        Object selectedStation = jList1.getSelectedValue();
+       Object selectedStation = jList1.getSelectedValue();
         if (selectedStation != null) {
             boolean alreadyExists = false;
             for (Sucursal s : sucursalList) {
@@ -249,11 +245,10 @@ public class VentanaM extends javax.swing.JFrame {
                     int maxIterations = sucursal.getT();
                     DFS dfs = new DFS(maxIterations, grafo);
                     dfs.search(startNode);
-                    CustomSet<String> reachableStations = dfs.getReachableStations();
-                    String[] reachableStationsArray = reachableStations.toArray();
-                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStationsArray));
+                    Set<String> reachableStations = dfs.getReachableStations();
+                    vOnly.setText("Estaciones alcanzables: " + reachableStations.stream().collect(Collectors.joining(", ")));
                 } else {
-                    vOnly.setText("Nodo para: " + stationId + " no encontrado.");
+                    vOnly.setText("Node para: " + stationId + " no encontrado.");
                 }
             } else {
                 vOnly.setText("Sucursal no valida.");
@@ -264,7 +259,7 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
-        for (Sucursal sucursal : sucursalList) {
+         for (Sucursal sucursal : sucursalList) {
             Object station = sucursal.getStation();
             String[] stationParts = station.toString().split(": ");
             String stationId = stationParts.length > 1 ? stationParts[1] : stationParts[0];
@@ -298,7 +293,7 @@ public class VentanaM extends javax.swing.JFrame {
                     System.out.println("Attr posicion Nodo no es de tipo Objeto[].");
                 }
             } else {
-                System.out.println("Nodo para estacion " + stationId + " no encontrado.");
+                System.out.println("Node para estacion " + stationId + " no encontrado.");
             }
         }
         grafo.display();
@@ -323,17 +318,16 @@ public class VentanaM extends javax.swing.JFrame {
                     int maxIterations = sucursal.getT();
                     BFS bfs = new BFS(maxIterations);
                     bfs.search(grafo, startNode);
-                    CustomSet<String> reachableStations = bfs.getReachableStations();
-                    String[] reachableStationsArray = reachableStations.toArray();
-                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStationsArray));
+                    Set<String> reachableStations = bfs.getReachableStations();
+                    vOnly.setText("Reachable stations: " + String.join(", ", reachableStations));
                 } else {
-                    vOnly.setText("Nodo para: " + stationId + " no encontrado.");
+                    vOnly.setText("Node for station " + stationId + " not found.");
                 }
             } else {
-                vOnly.setText("Sucursal no valida.");
+                vOnly.setText("Selected item is not a valid sucursal.");
             }
         } else {
-            vOnly.setText("Seleccione una sucursal!");
+            vOnly.setText("Please select a valid sucursal from the list.");
         }
     }//GEN-LAST:event_searchBFSActionPerformed
 
@@ -341,18 +335,14 @@ public class VentanaM extends javax.swing.JFrame {
         
     }//GEN-LAST:event_vOnlyActionPerformed
 
-    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_saveFileActionPerformed
-
     private void cTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cTotalActionPerformed
         if (sucursalList.isEmpty()) {
             vOnly.setText("No hay sucursales seleccionadas.");
             return;
         }
-        CustomSet<String> allNodes = new CustomSet<>(grafo.getAdjacencyList().keySet());
-        CustomSet<String> reachableNodes = new CustomSet<>();
-        CustomSet<String> markedNodes = new CustomSet<>();
+        Set<String> allNodes = new HashSet<>(grafo.getAdjacencyList().keySet());
+        Set<String> reachableNodes = new HashSet<>();
+        Set<String> markedNodes = new HashSet<>();
         for (Sucursal sucursal : sucursalList) {
             Object station = sucursal.getStation();
             String[] stationParts = station.toString().split(": ");
@@ -360,14 +350,17 @@ public class VentanaM extends javax.swing.JFrame {
             Node startNode = grafo.getGraph().getNode(stationId);
             if (startNode != null) {
                 int maxIterations = sucursal.getT();
+            // Perform BFS
                 BFS bfs = new BFS(maxIterations);
                 bfs.search(grafo, startNode);
                 reachableNodes.addAll(bfs.getReachableStations());
+            // Perform DFS
                 DFS dfs = new DFS(maxIterations, grafo);
                 dfs.search(startNode);
                 reachableNodes.addAll(dfs.getReachableStations());
             }
         }
+    // Collect all marked nodes from the graph
         for (Node node : grafo.getGraph()) {
             if ("marked".equals(node.getAttribute("ui.class"))) {
                 markedNodes.add(node.getId());
@@ -376,23 +369,47 @@ public class VentanaM extends javax.swing.JFrame {
         if (reachableNodes.containsAll(allNodes) || markedNodes.containsAll(allNodes)) {
             vOnly.setText("Las sucursales cubren totalmente la ciudad.");
         } else {
-            CustomSet<String> missingNodes = new CustomHashSet<>(allNodes);
+            Set<String> missingNodes = new HashSet<>(allNodes);
             missingNodes.removeAll(reachableNodes);
             missingNodes.removeAll(markedNodes);
-            String[] missingNodesArray = missingNodes.toArray();
-            vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodesArray));
+            vOnly.setText("Estaciones necesarias: " + String.join(", ", missingNodes));
         }
     }//GEN-LAST:event_cTotalActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
         if (newJsonFilePath != null) {
-            grafo.loadFromJSON(newJsonFilePath); // Utilize the Grafo's method to load the JSON file
-            DefaultListModel<String> listModel = new DefaultListModel<>();
-            for (String station : grafo.getAdjacencyList().keySet()) {
-                listModel.addElement(station);
-                System.out.println("Estacion añadida: " + station);
+            try {
+                File jsonFile = new File(newJsonFilePath);
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(jsonFile, Map.class);
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+                for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
+                    List<Map<String, List<Object>>> lines = entry.getValue();
+                    int lineaCounter = 1;
+                    for (Map<String, List<Object>> line : lines) {
+                        String lineaName = "Linea " + lineaCounter;
+                        for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
+                            List<Object> stations = lineEntry.getValue();
+                            for (Object station : stations) {
+                                if (station instanceof Map) {
+                                    Map<String, String> transfer = (Map<String, String>) station;
+                                    for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
+                                        listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
+                                        System.out.println("Estacion de transferencia añadida: " + transferEntry.getKey() + " - " + transferEntry.getValue());
+                                    }
+                                } else {
+                                    listModel.addElement(lineaName + ": " + station.toString());
+                                    System.out.println("Estacion añadida: " + station.toString());
+                                }
+                            }
+                        }
+                        lineaCounter++;
+                    }
+                }
+                jList1.setModel(listModel);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            jList1.setModel(listModel);
         }
     }
     /**
@@ -440,7 +457,6 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToggleButton saveFile;
     private javax.swing.JButton searchBFS;
     private javax.swing.JButton searchDFS;
     private javax.swing.JButton setT;

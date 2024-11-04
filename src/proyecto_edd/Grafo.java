@@ -3,14 +3,15 @@ package proyecto_edd;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 import java.io.*;
+import java.util.*;
 import com.fasterxml.jackson.databind.*;
 import org.graphstream.ui.view.Viewer;
 
 public class Grafo {
     private Graph graph;
-    private CustomMap<String, String> combinedStationsMap = new CustomMap<>();
-    private CustomMap<String, double[]> nodePositions = new CustomMap<>();
-    private CustomMap<String, CustomList<String>> adjacencyList = new CustomMap<>();
+    private Map<String, String> combinedStationsMap = new HashMap<>();
+    private Map<String, double[]> nodePositions = new HashMap<>();
+    private Map<String, List<String>> adjacencyList = new HashMap<>();
 
     // Constructor
     public Grafo() {
@@ -18,44 +19,43 @@ public class Grafo {
         graph = new MultiGraph("Grafo");
     }
 
-    // Adds a station or node
+    // Añade una estacion o nodo
     public void addStation(String station, double x, double y) {
         if (graph.getNode(station) == null) {
             Node node = graph.addNode(station);
             node.setAttribute("ui.label", station);
             node.setAttribute("xyz", x, y, 0);
             nodePositions.put(station, new double[]{x, y});
-            adjacencyList.put(station, new CustomList<>());
+            adjacencyList.put(station, new ArrayList<>());
         }
     }
 
-    // Adds a connection or edge
+    // Añade una conexion o edge
     public void addConnection(String station1, String station2) {
-        String edgeId = station1 + "-" + station2 + "_" + CustomUUIDGenerator.generateUUID();
+        String edgeId = station1 + "-" + station2 + "_" + UUID.randomUUID();
         graph.addEdge(edgeId, station1, station2);
         adjacencyList.get(station1).add(station2);
         adjacencyList.get(station2).add(station1);
     }
 
-    // Removes a station or node
+    // Quita una estacion o Nodo
     public void removeStation(String station) {
         Node node = graph.getNode(station);
         if (node != null) {
             graph.removeNode(station);
             adjacencyList.remove(station);
-            for (CustomList<String> neighbors : adjacencyList.values()) {
+            for (List<String> neighbors : adjacencyList.values()) {
                 neighbors.remove(station);
             }
         }
     }
 
-    // Displays the graph
+    // Muestra el grafo
     public void display() {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
 
-        // Set node styles like a subway map
         String styleSheet =
                 "graph { padding: 50px; }" +
                 "node { size: 10px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
@@ -66,7 +66,6 @@ public class Grafo {
         graph.setAttribute("ui.stylesheet", styleSheet);
         Viewer viewer = graph.display();
 
-        // Adjust node positions for better layout
         double xIncrement = 100.0;
         double yIncrement = 100.0;
         double x = 0.0;
@@ -75,13 +74,11 @@ public class Grafo {
         for (Node node : graph) {
             double[] pos = nodePositions.get(node.getId());
             if (pos != null) {
-                // Adjust positions programmatically for subway station layout
                 node.setAttribute("xyz", pos[0], pos[1], 0);
             } else {
-                // New layout logic
                 node.setAttribute("xyz", x, y, 0);
                 x += xIncrement;
-                if (x > 500) { // Reset x and increment y to create a grid-like layout
+                if (x > 500) {
                     x = 0;
                     y += yIncrement;
                 }
@@ -89,27 +86,26 @@ public class Grafo {
         }
     }
 
-    // Loads stations and connections from a JSON file
     public void loadFromJSON(String jsonFile) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            CustomMap<String, CustomList<CustomMap<String, CustomList<Object>>>> data = mapper.readValue(new File(jsonFile), CustomMap.class);
+            Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(new File(jsonFile), Map.class);
             double x = 0.0;
             double y = 0.0;
             double yIncrement = 100.0;
-            for (CustomMap.Entry<String, CustomList<CustomMap<String, CustomList<Object>>>> entry : data.entrySet()) {
-                CustomList<CustomMap<String, CustomList<Object>>> lines = entry.getValue();
-                for (CustomMap<String, CustomList<Object>> line : lines) {
-                    for (CustomMap.Entry<String, CustomList<Object>> lineEntry : line.entrySet()) {
-                        CustomList<Object> stations = lineEntry.getValue();
+            for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
+                List<Map<String, List<Object>>> lines = entry.getValue();
+                for (Map<String, List<Object>> line : lines) {
+                    for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
+                        List<Object> stations = lineEntry.getValue();
                         String previousStation = null;
                         for (int i = 0; i < stations.size(); i++) {
                             Object station = stations.get(i);
                             String stationName;
                             if (station instanceof String) {
                                 stationName = (String) station;
-                            } else if (station instanceof CustomMap) {
-                                CustomMap<String, String> transfer = (CustomMap<String, String>) station;
+                            } else if (station instanceof Map) {
+                                Map<String, String> transfer = (Map<String, String>) station;
                                 String fromStation = transfer.keySet().iterator().next();
                                 String toStation = transfer.get(fromStation);
                                 stationName = fromStation + ":" + toStation;
@@ -142,7 +138,8 @@ public class Grafo {
             e.printStackTrace();
         }
     }
-    // Create edges between matching stations from combinedStationsMap
+
+    // Crea edges entre matchingStations dentro de combinedStationsMap
     private void createEdgesBetweenMatchingStations() {
         for (String station1 : combinedStationsMap.keySet()) {
             for (String station2 : combinedStationsMap.keySet()) {
@@ -156,8 +153,7 @@ public class Grafo {
     public Graph getGraph() {
         return graph;
     }
-
-    public CustomMap<String, CustomList<String>> getAdjacencyList() {
+    public Map<String, List<String>> getAdjacencyList() {
         return adjacencyList;
     }
 }
