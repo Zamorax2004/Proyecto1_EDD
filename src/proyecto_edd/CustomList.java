@@ -104,4 +104,8 @@ public class CustomList<E> implements Iterable<E>{
         }
         return current.data;
     }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
 }

@@ -249,7 +249,7 @@ public class VentanaM extends javax.swing.JFrame {
                     DFS dfs = new DFS(maxIterations, grafo);
                     dfs.search(startNode);
                     CustomSet<String> reachableStations = dfs.getReachableStations();
-                    vOnly.setText("Estaciones alcanzables: " + reachableStations.stream().collect(Collectors.joining(", ")));
+                    vOnly.setText("Estaciones alcanzables: " + String.join(", ", reachableStations));
                 } else {
                     vOnly.setText("Nodo para: " + stationId + " no encontrado.");
                 }
