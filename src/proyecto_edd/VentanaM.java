@@ -21,7 +21,6 @@ import org.graphstream.graph.Node;
 public class VentanaM extends javax.swing.JFrame {
     private String newJsonFilePath;
     private Sucursal sucursal;
-    private Lista sucursales = new Lista();
     private Grafo grafo;
 
     /**
@@ -29,7 +28,7 @@ public class VentanaM extends javax.swing.JFrame {
      */
     public VentanaM(String newJsonFilePath, int t) {
         this.newJsonFilePath = newJsonFilePath;
-        this.sucursal = new Sucursal(null);
+        this.sucursal = new Sucursal(null, null);
         this.sucursal.setT(t);
         this.grafo = new Grafo();
         initComponents();
