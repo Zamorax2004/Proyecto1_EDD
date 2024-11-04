@@ -1,10 +1,10 @@
 package proyecto_edd;
 
-public class CustomList<E> implements Iterable<E> {
+public class CustomList<E>{
     private Node<E> head;
     private int size;
 
-    private static class Node<E> {
+    public static class Node<E> {
         E data;
         Node<E> next;
 
@@ -69,28 +69,36 @@ public class CustomList<E> implements Iterable<E> {
         return false;
     }
 
-    @Override
     public CustomIterator<E> iterator() {
         return new CustomIterator<>(head);
     }
 
-    private static class CustomIterator<E> implements java.util.Iterator<E> {
+    public static class CustomIterator<E>{
         private Node<E> current;
 
         CustomIterator(Node<E> head) {
             this.current = head;
         }
 
-        @Override
         public boolean hasNext() {
             return current != null;
         }
 
-        @Override
         public E next() {
             E data = current.data;
             current = current.next;
             return data;
         }
+    }
+    
+    public E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        Node<E> current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current.data;
     }
 }

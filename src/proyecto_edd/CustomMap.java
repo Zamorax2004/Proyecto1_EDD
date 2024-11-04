@@ -7,13 +7,21 @@ public class CustomMap<K, V> {
         entries = new CustomList<>();
     }
 
-    private static class Entry<K, V> {
+    public static class Entry<K, V> {
         K key;
         V value;
 
-        Entry(K key, V value) {
+        public Entry(K key, V value) {
             this.key = key;
             this.value = value;
+        }
+        
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
         }
 
         boolean matchesKey(K key) {
@@ -51,5 +59,39 @@ public class CustomMap<K, V> {
 
     public int size() {
         return entries.size();
+    }
+
+    public CustomList<K> keySet() {
+        CustomList<K> keys = new CustomList<>();
+        for (Entry<K, V> entry : entries) {
+            keys.add(entry.key);
+        }
+        return keys;
+    }
+    
+    public CustomList<Entry<K, V>> entrySet() {
+        CustomList<Entry<K, V>> entrySet = new CustomList<>();
+        for (Entry<K, V> entry : entries) {
+            entrySet.add(entry);
+        }
+        return entrySet;
+    }
+    
+    public CustomList<V> values() {
+        CustomList<V> values = new CustomList<>();
+        for (Entry<K, V> entry : entries) {
+            values.add(entry.getValue());
+        }
+        return values;
+    }
+    
+    public boolean remove(K key) {
+        for (Entry<K, V> entry : entries) {
+            if (entry.matchesKey(key)) {
+                entries.remove(entry);
+                return true;
+            }
+        }
+        return false;
     }
 }
