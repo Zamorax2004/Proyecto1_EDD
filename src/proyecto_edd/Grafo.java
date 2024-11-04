@@ -18,7 +18,7 @@ public class Grafo {
         graph = new MultiGraph("Grafo");
     }
 
-    // Adds a station or node
+    // Añade una estacion o nodo
     public void addStation(String station, double x, double y) {
         if (graph.getNode(station) == null) {
             Node node = graph.addNode(station);
@@ -28,13 +28,13 @@ public class Grafo {
         }
     }
 
-    // Adds a connection or edge
+    // Añade una conexion o edge
     public void addConnection(String station1, String station2) {
         String edgeId = station1 + "-" + station2 + "_" + UUID.randomUUID();
         graph.addEdge(edgeId, station1, station2);
     }
 
-    // Removes a station or node
+    // Quita una estacion o Nodo
     public void removeStation(String station) {
         Node node = graph.getNode(station);
         if (node != null) {
@@ -42,13 +42,12 @@ public class Grafo {
         }
     }
 
-    // Displays the graph
+    // Muestra el grafo
     public void display() {
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
         }
 
-        // Set node styles like a subway map
         String styleSheet =
                 "graph { padding: 50px; }" +
                 "node { size: 10px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
@@ -59,7 +58,6 @@ public class Grafo {
         graph.setAttribute("ui.stylesheet", styleSheet);
         Viewer viewer = graph.display();
 
-        // Adjust node positions for better layout
         double xIncrement = 100.0;
         double yIncrement = 100.0;
         double x = 0.0;
@@ -68,13 +66,11 @@ public class Grafo {
         for (Node node : graph) {
             double[] pos = nodePositions.get(node.getId());
             if (pos != null) {
-                // Adjust positions programmatically for subway station layout
                 node.setAttribute("xyz", pos[0], pos[1], 0);
             } else {
-                // New layout logic
                 node.setAttribute("xyz", x, y, 0);
                 x += xIncrement;
-                if (x > 500) { // Reset x and increment y to create a grid-like layout
+                if (x > 500) {
                     x = 0;
                     y += yIncrement;
                 }
@@ -108,10 +104,8 @@ public class Grafo {
                                 stationName = fromStation + ":" + toStation;
                                 combinedStationsMap.put(fromStation, stationName);
                                 combinedStationsMap.put(toStation, stationName);
-                                // Add both stations individually as well
                                 addStation(fromStation, x, y);
                                 addStation(toStation, x, y);
-                                // Connect the combined station to its respective line
                                 if (previousStation != null) {
                                     addConnection(previousStation, fromStation);
                                     addConnection(previousStation, toStation);
@@ -138,7 +132,7 @@ public class Grafo {
         }
     }
 
-    // Create edges between matching stations from combinedStationsMap
+    // Crea edges entre matchingStations dentro de combinedStationsMap
     private void createEdgesBetweenMatchingStations() {
         for (String station1 : combinedStationsMap.keySet()) {
             for (String station2 : combinedStationsMap.keySet()) {

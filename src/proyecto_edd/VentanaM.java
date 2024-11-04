@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import org.graphstream.graph.Node;
 
@@ -64,7 +66,7 @@ public class VentanaM extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         searchBFS = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        saveFile = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jToggleButton3 = new javax.swing.JToggleButton();
         vOnly = new javax.swing.JTextField();
@@ -106,7 +108,7 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(searchDFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
-        displayGrafo.setText("Mostrar Grafo*");
+        displayGrafo.setText("Mostrar Grafo");
         displayGrafo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayGrafoActionPerformed(evt);
@@ -145,8 +147,13 @@ public class VentanaM extends javax.swing.JFrame {
         });
         jPanel1.add(searchBFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
-        jToggleButton1.setText("Guardar Archivo*");
-        jPanel1.add(jToggleButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, -1, -1));
+        saveFile.setText("Guardar Archivo*");
+        saveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFileActionPerformed(evt);
+            }
+        });
+        jPanel1.add(saveFile, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, -1, -1));
 
         jToggleButton2.setText("Agregar Linea*");
         jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -232,7 +239,35 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
-            
+        Object selectedStation = jList1.getSelectedValue();
+        if (selectedStation != null && selectedStation instanceof String) {
+            String selectedStationStr = (String) selectedStation;
+            String[] parts = selectedStationStr.split(": ");
+            String stationId = parts.length > 1 ? parts[1] : parts[0];
+            boolean isValidSucursal = false;
+            for (Sucursal s : sucursalList) {
+                if (s.getStation().equals(selectedStationStr)) {
+                    isValidSucursal = true;
+                    break;
+                }
+            }
+            if (isValidSucursal) {
+                Node startNode = grafo.getGraph().getNode(stationId);
+                if (startNode != null) {
+                    int maxIterations = sucursal.getT();
+                    DFS dfs = new DFS(maxIterations);
+                    dfs.search(startNode);
+                    Set<String> reachableStations = dfs.getReachableStations();
+                    vOnly.setText("Estaciones alcanzables: " + reachableStations.stream().collect(Collectors.joining(", ")));
+                } else {
+                    vOnly.setText("Node para: " + stationId + " no encontrado.");
+                }
+            } else {
+                vOnly.setText("Sucursal no valida.");
+            }
+        } else {
+            vOnly.setText("Seleccione una sucursal.");
+        }
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
@@ -242,7 +277,6 @@ public class VentanaM extends javax.swing.JFrame {
             String stationId = stationParts.length > 1 ? stationParts[1] : stationParts[0];
             Node node = grafo.getGraph().getNode(stationId);
             if (node != null) {
-            // Ensure the attribute is cast correctly
                 Object posObject = node.getAttribute("xyz");
                 if (posObject instanceof Object[]) {
                     Object[] posArray = (Object[]) posObject;
@@ -257,22 +291,21 @@ public class VentanaM extends javax.swing.JFrame {
                                 newNode.setAttribute("ui.label", newNodeId);
                                 newNode.setAttribute("xyz", x + 0.1, y + 0.1, z + 0.1);
                                 newNode.setAttribute("ui.style", "fill-color: black;");
-                                System.out.println("Node " + newNodeId + " created at position: " + x + ", " + y + ", " + z);
-                            // Add edge between the station node and the new node
+                                System.out.println("Nodo " + newNodeId + " creado en la posicion: " + x + ", " + y + ", " + z);
                                 String edgeId = stationId + "_to_" + newNodeId;
                                 grafo.getGraph().addEdge(edgeId, stationId, newNodeId);
                             }
                         } catch (NumberFormatException e) {
-                            System.out.println("Failed to parse node position attributes to double.");
+                            System.out.println("Error de parseDouble.");
                         }
                     } else {
-                        System.out.println("Node position attribute does not have exactly 3 elements.");
+                        System.out.println("Attr posicion Nodo no tiene 3 elementos exactos.");
                     }
                 } else {
-                    System.out.println("Node position attribute is not of type Object[].");
+                    System.out.println("Attr posicion Nodo no es de tipo Objeto[].");
                 }
             } else {
-                System.out.println("Node for station " + stationId + " not found.");
+                System.out.println("Node para estacion " + stationId + " no encontrado.");
             }
         }
         grafo.display();
@@ -289,6 +322,10 @@ public class VentanaM extends javax.swing.JFrame {
     private void vOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vOnlyActionPerformed
         
     }//GEN-LAST:event_vOnlyActionPerformed
+
+    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveFileActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
         if (newJsonFilePath != null) {
@@ -309,11 +346,11 @@ public class VentanaM extends javax.swing.JFrame {
                                     Map<String, String> transfer = (Map<String, String>) station;
                                     for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
                                         listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
-                                        System.out.println("Added transfer station: " + transferEntry.getKey() + " - " + transferEntry.getValue());
+                                        System.out.println("Estacion de transferencia añadida: " + transferEntry.getKey() + " - " + transferEntry.getValue());
                                     }
                                 } else {
                                     listModel.addElement(lineaName + ": " + station.toString());
-                                    System.out.println("Added station: " + station.toString());
+                                    System.out.println("Estacion añadida: " + station.toString());
                                 }
                             }
                         }
@@ -370,9 +407,9 @@ public class VentanaM extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
+    private javax.swing.JToggleButton saveFile;
     private javax.swing.JButton searchBFS;
     private javax.swing.JButton searchDFS;
     private javax.swing.JButton setT;

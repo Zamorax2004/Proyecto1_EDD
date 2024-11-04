@@ -1,6 +1,6 @@
 package proyecto_edd;
 
-//La clase sucursal representa una rama con un conjunto de estaciones y conexiones
+//La clase Sucursal contiene una variable t, el numero de sucursal y la estacion asociada
 public class Sucursal {
     private int t;
     private int sucursal;

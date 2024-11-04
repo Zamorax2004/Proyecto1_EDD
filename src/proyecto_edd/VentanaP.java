@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileSystemView;
  *
  * @author simon
  */
-//JFrame inicial con el proposito de elegir el archivo, falto adornar
+//JFrame inicial con el proposito de elegir el archivo
 public class VentanaP extends javax.swing.JFrame {
     private File selectedFile;
     private int t;
