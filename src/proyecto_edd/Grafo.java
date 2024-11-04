@@ -51,7 +51,7 @@ public class Grafo {
         // Set node styles like a subway map
         String styleSheet =
                 "graph { padding: 50px; }" +
-                "node { size: 20px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
+                "node { size: 10px; text-size: 14; text-alignment: at-right; fill-color: blue; }" +
                 "node.marked { fill-color: red; }" +
                 "edge { text-size: 14; fill-color: black; }" +
                 "edge.marked { fill-color: red; }";
@@ -147,11 +147,5 @@ public class Grafo {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Grafo grafo = new Grafo();
-        grafo.loadFromJSON("Caracas.json");
-        grafo.display();
     }
 }

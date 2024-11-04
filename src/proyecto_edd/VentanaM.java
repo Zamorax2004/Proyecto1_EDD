@@ -4,10 +4,11 @@
  */
 package proyecto_edd;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 
 
@@ -34,6 +35,7 @@ public class VentanaM extends javax.swing.JFrame {
         textField2.setEditable(false);
         vOnly.setEditable(false);
         loadStations();
+        grafo.loadFromJSON(newJsonFilePath);
     }
 
 
@@ -201,20 +203,7 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_textField2ActionPerformed
     //Boton para confirmar sucursal seleccionada y añadirla a una lista o removerla
     private void colocarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colocarSucursalActionPerformed
-        String station = jList1.getSelectedValue();
-        if (station != null) {
-            if (sucursal.getStations().contains(station)) {
-                sucursal.removeStation(station); 
-                grafo.removeStation(station); 
-                vOnly.setText("Parada: " + station + " removida.");
-            } else {
-                sucursal.addStation(station);
-                grafo.addStation(station); 
-                vOnly.setText("Parada: " + station + " añadida.");
-            }
-        } else {
-            vOnly.setText("No se ha seleccionado una parada");
-        }
+        
     }//GEN-LAST:event_colocarSucursalActionPerformed
     //Boton de Busqueda en Profundidad
     private void searchDFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDFSActionPerformed
@@ -222,7 +211,7 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDFSActionPerformed
     //Boton que muestra el grafo 
     private void displayGrafoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayGrafoActionPerformed
-      
+            grafo.display();
     }//GEN-LAST:event_displayGrafoActionPerformed
     //Boton de Busqueda en Amplitud
     private void searchBFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBFSActionPerformed
@@ -238,36 +227,40 @@ public class VentanaM extends javax.swing.JFrame {
     }//GEN-LAST:event_vOnlyActionPerformed
     //Metodo para leer las paradas del json y cargarlas como objetos en una JList
     private void loadStations() {
-        if (newJsonFilePath != null) {
-            try {
-                File jsonFile = new File(newJsonFilePath);
-                Json jsonReader = new Json(jsonFile);
-                JsonObject jsonObject = jsonReader.readJson();
-                DefaultListModel<String> listModel = new DefaultListModel<>();
-                String cityKey = jsonObject.keySet().iterator().next();
-                JsonArray metroLines = jsonObject.getAsJsonArray(cityKey);
-                for (int i = 0; i < metroLines.size(); i++) {
-                    JsonObject line = metroLines.get(i).getAsJsonObject();
-                    for (String key : line.keySet()) {
-                        JsonArray stations = line.getAsJsonArray(key);
-                        for (int j = 0; j < stations.size(); j++) {
-                            if (stations.get(j).isJsonObject()) {
-                                JsonObject stationObject = stations.get(j).getAsJsonObject();
-                                for (String stationName : stationObject.keySet()) {
-                                    listModel.addElement(stationName + " - " + stationObject.get(stationName).getAsString());
+    if (newJsonFilePath != null) {
+        try {
+            File jsonFile = new File(newJsonFilePath);
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, List<Map<String, List<Object>>>> data = mapper.readValue(jsonFile, Map.class);
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+
+            for (Map.Entry<String, List<Map<String, List<Object>>>> entry : data.entrySet()) {
+                List<Map<String, List<Object>>> lines = entry.getValue();
+                int lineaCounter = 1;
+                for (Map<String, List<Object>> line : lines) {
+                    String lineaName = "Linea " + lineaCounter;
+                    for (Map.Entry<String, List<Object>> lineEntry : line.entrySet()) {
+                        List<Object> stations = lineEntry.getValue();
+                        for (Object station : stations) {
+                            if (station instanceof Map) {
+                                Map<String, String> transfer = (Map<String, String>) station;
+                                for (Map.Entry<String, String> transferEntry : transfer.entrySet()) {
+                                    listModel.addElement(lineaName + ": " + transferEntry.getKey() + " - " + transferEntry.getValue());
                                 }
                             } else {
-                                listModel.addElement(stations.get(j).getAsString());
+                                listModel.addElement(lineaName + ": " + station.toString());
                             }
                         }
                     }
+                    lineaCounter++;
                 }
-                jList1.setModel(listModel);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            jList1.setModel(listModel);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+}
     
     /**
      * @param args the command line arguments
